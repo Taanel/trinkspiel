@@ -1,0 +1,463 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-16T17:50:06+00:00",
+  "title": "Design System: Một hai ba dô!",
+  "extensions": {
+    "colorMeta": {
+      "nacht": {
+        "role": "neutral",
+        "displayName": "Night",
+        "canonical": "#14182e",
+        "tonalRamp": [
+          "oklch(15% 0.044 274.4)",
+          "oklch(26% 0.044 274.4)",
+          "oklch(38% 0.044 274.4)",
+          "oklch(50% 0.044 274.4)",
+          "oklch(62% 0.044 274.4)",
+          "oklch(74% 0.044 274.4)",
+          "oklch(85% 0.044 274.4)",
+          "oklch(95% 0.044 274.4)"
+        ]
+      },
+      "nacht-2": {
+        "role": "neutral",
+        "displayName": "Night Raised",
+        "canonical": "#1e2342",
+        "tonalRamp": [
+          "oklch(15% 0.058 274.9)",
+          "oklch(26% 0.058 274.9)",
+          "oklch(38% 0.058 274.9)",
+          "oklch(50% 0.058 274.9)",
+          "oklch(62% 0.058 274.9)",
+          "oklch(74% 0.058 274.9)",
+          "oklch(85% 0.058 274.9)",
+          "oklch(95% 0.058 274.9)"
+        ]
+      },
+      "nacht-3": {
+        "role": "neutral",
+        "displayName": "Night High",
+        "canonical": "#2a3058",
+        "tonalRamp": [
+          "oklch(15% 0.071 275.3)",
+          "oklch(26% 0.071 275.3)",
+          "oklch(38% 0.071 275.3)",
+          "oklch(50% 0.071 275.3)",
+          "oklch(62% 0.071 275.3)",
+          "oklch(74% 0.071 275.3)",
+          "oklch(85% 0.071 275.3)",
+          "oklch(95% 0.071 275.3)"
+        ]
+      },
+      "papier": {
+        "role": "neutral",
+        "displayName": "Cream",
+        "canonical": "#f3eedc",
+        "tonalRamp": [
+          "oklch(15% 0.024 94.1)",
+          "oklch(26% 0.024 94.1)",
+          "oklch(38% 0.024 94.1)",
+          "oklch(50% 0.024 94.1)",
+          "oklch(62% 0.024 94.1)",
+          "oklch(74% 0.024 94.1)",
+          "oklch(85% 0.024 94.1)",
+          "oklch(95% 0.024 94.1)"
+        ]
+      },
+      "papier-2": {
+        "role": "neutral",
+        "displayName": "Lilac Grey",
+        "canonical": "#cfc9e3",
+        "tonalRamp": [
+          "oklch(15% 0.036 296.2)",
+          "oklch(26% 0.036 296.2)",
+          "oklch(38% 0.036 296.2)",
+          "oklch(50% 0.036 296.2)",
+          "oklch(62% 0.036 296.2)",
+          "oklch(74% 0.036 296.2)",
+          "oklch(85% 0.036 296.2)",
+          "oklch(95% 0.036 296.2)"
+        ]
+      },
+      "zitrone": {
+        "role": "primary",
+        "displayName": "Lemon Ticket",
+        "canonical": "#f6e27a",
+        "tonalRamp": [
+          "oklch(15% 0.127 98.7)",
+          "oklch(26% 0.127 98.7)",
+          "oklch(38% 0.127 98.7)",
+          "oklch(50% 0.127 98.7)",
+          "oklch(62% 0.127 98.7)",
+          "oklch(74% 0.127 98.7)",
+          "oklch(85% 0.127 98.7)",
+          "oklch(95% 0.127 98.7)"
+        ]
+      },
+      "rosa": {
+        "role": "secondary",
+        "displayName": "Pink Ticket",
+        "canonical": "#f4a7be",
+        "tonalRamp": [
+          "oklch(15% 0.095 360.0)",
+          "oklch(26% 0.095 360.0)",
+          "oklch(38% 0.095 360.0)",
+          "oklch(50% 0.095 360.0)",
+          "oklch(62% 0.095 360.0)",
+          "oklch(74% 0.095 360.0)",
+          "oklch(85% 0.095 360.0)",
+          "oklch(95% 0.095 360.0)"
+        ]
+      },
+      "minze": {
+        "role": "secondary",
+        "displayName": "Mint Ticket",
+        "canonical": "#9fe3c9",
+        "tonalRamp": [
+          "oklch(15% 0.078 168.7)",
+          "oklch(26% 0.078 168.7)",
+          "oklch(38% 0.078 168.7)",
+          "oklch(50% 0.078 168.7)",
+          "oklch(62% 0.078 168.7)",
+          "oklch(74% 0.078 168.7)",
+          "oklch(85% 0.078 168.7)",
+          "oklch(95% 0.078 168.7)"
+        ]
+      },
+      "flieder": {
+        "role": "secondary",
+        "displayName": "Lilac Ticket",
+        "canonical": "#b9b4f5",
+        "tonalRamp": [
+          "oklch(15% 0.091 287.7)",
+          "oklch(26% 0.091 287.7)",
+          "oklch(38% 0.091 287.7)",
+          "oklch(50% 0.091 287.7)",
+          "oklch(62% 0.091 287.7)",
+          "oklch(74% 0.091 287.7)",
+          "oklch(85% 0.091 287.7)",
+          "oklch(95% 0.091 287.7)"
+        ]
+      },
+      "aprikose": {
+        "role": "secondary",
+        "displayName": "Apricot Ticket",
+        "canonical": "#f7b267",
+        "tonalRamp": [
+          "oklch(15% 0.122 66.9)",
+          "oklch(26% 0.122 66.9)",
+          "oklch(38% 0.122 66.9)",
+          "oklch(50% 0.122 66.9)",
+          "oklch(62% 0.122 66.9)",
+          "oklch(74% 0.122 66.9)",
+          "oklch(85% 0.122 66.9)",
+          "oklch(95% 0.122 66.9)"
+        ]
+      },
+      "koralle": {
+        "role": "tertiary",
+        "displayName": "Soft Coral (errors only)",
+        "canonical": "#f59e9e",
+        "tonalRamp": [
+          "oklch(15% 0.104 19.7)",
+          "oklch(26% 0.104 19.7)",
+          "oklch(38% 0.104 19.7)",
+          "oklch(50% 0.104 19.7)",
+          "oklch(62% 0.104 19.7)",
+          "oklch(74% 0.104 19.7)",
+          "oklch(85% 0.104 19.7)",
+          "oklch(95% 0.104 19.7)"
+        ]
+      },
+      "tinte": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1b1f3a",
+        "tonalRamp": [
+          "oklch(15% 0.051 275.7)",
+          "oklch(26% 0.051 275.7)",
+          "oklch(38% 0.051 275.7)",
+          "oklch(50% 0.051 275.7)",
+          "oklch(62% 0.051 275.7)",
+          "oklch(74% 0.051 275.7)",
+          "oklch(85% 0.051 275.7)",
+          "oklch(95% 0.051 275.7)"
+        ]
+      },
+      "tinte-2": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#3b3f63",
+        "tonalRamp": [
+          "oklch(15% 0.062 278.2)",
+          "oklch(26% 0.062 278.2)",
+          "oklch(38% 0.062 278.2)",
+          "oklch(50% 0.062 278.2)",
+          "oklch(62% 0.062 278.2)",
+          "oklch(74% 0.062 278.2)",
+          "oklch(85% 0.062 278.2)",
+          "oklch(95% 0.062 278.2)"
+        ]
+      },
+      "druckblau": {
+        "role": "tertiary",
+        "displayName": "Print Blue",
+        "canonical": "#2440a8",
+        "tonalRamp": [
+          "oklch(15% 0.160 267.0)",
+          "oklch(26% 0.160 267.0)",
+          "oklch(38% 0.160 267.0)",
+          "oklch(50% 0.160 267.0)",
+          "oklch(62% 0.160 267.0)",
+          "oklch(74% 0.160 267.0)",
+          "oklch(85% 0.160 267.0)",
+          "oklch(95% 0.160 267.0)"
+        ]
+      },
+      "rot": {
+        "role": "tertiary",
+        "displayName": "Ink Red (you drink only)",
+        "canonical": "#d7263d",
+        "tonalRamp": [
+          "oklch(15% 0.160 21.1)",
+          "oklch(26% 0.160 21.1)",
+          "oklch(38% 0.160 21.1)",
+          "oklch(50% 0.160 21.1)",
+          "oklch(62% 0.160 21.1)",
+          "oklch(74% 0.160 21.1)",
+          "oklch(85% 0.160 21.1)",
+          "oklch(95% 0.160 21.1)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Game name on the start screen, lemon, condensed."
+      },
+      "display-small": {
+        "displayName": "Display Small",
+        "purpose": "Lobby and end-screen heading."
+      },
+      "question": {
+        "displayName": "Question",
+        "purpose": "The question printed on the round ticket."
+      },
+      "ticket-title": {
+        "displayName": "Ticket Title",
+        "purpose": "Game names on menu tickets; 2.3rem on large tickets."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Ranks and sip counts; 3rem on the winner ticket."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings on night."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "All pill buttons."
+      },
+      "serial": {
+        "displayName": "Serial",
+        "purpose": "Print-blue serial marks on tickets."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All reading text."
+      },
+      "ticket-text": {
+        "displayName": "Ticket Text",
+        "purpose": "Short description under a ticket title."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-raus",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Single easing for every entrance and press."
+      },
+      {
+        "name": "los-ziehen",
+        "value": "0.6s ease-raus; from translateY(48px) rotate(-3deg), opacity 0",
+        "purpose": "Question, card or explanation ticket drawn from the stack."
+      },
+      {
+        "name": "kreis-ziehen",
+        "value": "0.45s ease-raus; clip-path inset wipe left to right",
+        "purpose": "Pen circle scribbled around a selection."
+      },
+      {
+        "name": "stanzen",
+        "value": "0.25s ease-raus; from scale(0.4), opacity 0",
+        "purpose": "Punch hole appears in a finished player's avatar."
+      },
+      {
+        "name": "ziehung",
+        "value": "digits roll 650ms, stagger 90ms, max delay 450ms; then einrasten 0.35s from scale(1.25)",
+        "purpose": "The draw: only result digits roll, rows stay still."
+      },
+      {
+        "name": "schwingen",
+        "value": "1.6s ease-in-out infinite alternate, rotate -6deg to 6deg",
+        "purpose": "Waiting ticket swings while reconnecting."
+      },
+      {
+        "name": "hochziehen",
+        "value": "0.35s ease-raus; from translateY(40px), opacity 0",
+        "purpose": "Help sheet slides up."
+      },
+      {
+        "name": "press",
+        "value": "scale(0.97) over 0.15s ease-raus",
+        "purpose": "Button and row press feedback."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all animations and transitions 0.01ms; ziehung() skipped",
+        "purpose": "Every animation has an instant fallback."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "base",
+        "value": "0px"
+      },
+      {
+        "name": "wide",
+        "value": "600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Main Button",
+      "kind": "button",
+      "refersTo": "button-haupt",
+      "description": "Lemon pill, one per screen, in the bottom action bar.",
+      "html": "<button class=\"ds-knopf-haupt\">Spiel starten</button>",
+      "css": ".ds-knopf-haupt{width:100%;min-height:56px;padding:12px 24px;border:0;border-radius:999px;background:var(--zitrone,#f6e27a);color:var(--tinte,#1b1f3a);font-family:'Bricolage Grotesque','Be Vietnam Pro',system-ui,sans-serif;font-weight:700;font-size:1.25rem;line-height:1.1;cursor:pointer;transition:transform .15s cubic-bezier(.16,1,.3,1),background-color .2s}.ds-knopf-haupt:hover{background:#fbeb9a}.ds-knopf-haupt:active{transform:scale(.97)}.ds-knopf-haupt:focus-visible{outline:3px solid var(--zitrone,#f6e27a);outline-offset:3px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-zweit",
+      "description": "Night-high pill for the second action.",
+      "html": "<button class=\"ds-knopf-zweit\">Anderes Spiel</button>",
+      "css": ".ds-knopf-zweit{width:100%;min-height:56px;padding:12px 24px;border:0;border-radius:999px;background:var(--nacht-3,#2a3058);color:var(--papier,#f3eedc);font-family:'Bricolage Grotesque','Be Vietnam Pro',system-ui,sans-serif;font-weight:700;font-size:1.25rem;line-height:1.1;cursor:pointer;transition:transform .15s cubic-bezier(.16,1,.3,1),background-color .2s}.ds-knopf-zweit:hover{background:#353c6c}.ds-knopf-zweit:active{transform:scale(.97)}.ds-knopf-zweit:focus-visible{outline:3px solid var(--zitrone,#f6e27a);outline-offset:3px}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Night-raised field, 56px, lemon border on focus.",
+      "html": "<input class=\"ds-eingabe\" placeholder=\"Dein Name\">",
+      "css": ".ds-eingabe{width:100%;min-height:56px;padding:0 16px;border:2px solid transparent;border-radius:12px;background:var(--nacht-2,#1e2342);color:var(--papier,#f3eedc);font-family:'Be Vietnam Pro',system-ui,sans-serif;font-size:1.2rem;transition:border-color .2s}.ds-eingabe::placeholder{color:#9a95b5}.ds-eingabe:focus{outline:none;border-color:var(--zitrone,#f6e27a)}"
+    },
+    {
+      "name": "Language Toggle",
+      "kind": "nav",
+      "refersTo": "segment-active",
+      "description": "Pill track in the header; pressed option is cream.",
+      "html": "<div class=\"ds-segment\"><button class=\"ds-seg\" aria-pressed=\"true\">DE</button><button class=\"ds-seg\">EN</button><button class=\"ds-seg\">VI</button></div>",
+      "css": ".ds-segment{display:inline-flex;padding:3px;border-radius:999px;background:var(--nacht-2,#1e2342)}.ds-seg{min-width:40px;height:40px;padding:0 8px;border:0;border-radius:999px;background:transparent;color:var(--papier-2,#cfc9e3);font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:background-color .2s,color .2s}.ds-seg[aria-pressed=true]{background:var(--papier,#f3eedc);color:var(--tinte,#1b1f3a)}.ds-seg:focus-visible{outline:3px solid var(--zitrone,#f6e27a);outline-offset:3px}"
+    },
+    {
+      "name": "Player Chip",
+      "kind": "chip",
+      "refersTo": "avatar",
+      "description": "Lobby chip: paper-coloured avatar by join order plus name.",
+      "html": "<span class=\"ds-chip\"><span class=\"ds-avatar\" style=\"background:#f4a7be\">M</span>Mai</span>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:4px 12px 4px 4px;border-radius:999px;background:var(--nacht-2,#1e2342);color:var(--papier,#f3eedc);font-family:'Be Vietnam Pro',system-ui,sans-serif}.ds-avatar{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;color:var(--tinte,#1b1f3a);font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800}"
+    },
+    {
+      "name": "Game Ticket (active)",
+      "kind": "card",
+      "refersTo": "ticket",
+      "description": "Notched paper ticket with tear-off edge, guilloche, serial mark and pen circle.",
+      "html": "<div class=\"ds-los ds-aktiv\"><span class=\"ds-serie\">KXPT·00</span><span class=\"ds-titel\">Party-Mix<svg class=\"ds-kreis\" viewBox=\"0 0 100 60\" preserveAspectRatio=\"none\"><path d=\"M94 10 C78 0 18 0 4 12 C-2 26 2 56 50 58 C94 60 101 40 98 20 C96 9 86 3 70 2\"/></svg></span><span class=\"ds-text\">Alle Spiele gemischt</span></div>",
+      "css": ".ds-los{--los:var(--zitrone,#f6e27a);position:relative;padding:16px 18px 16px 30px;border-radius:6px;background-color:var(--los);color:var(--tinte,#1b1f3a);font-family:'Be Vietnam Pro',system-ui,sans-serif;-webkit-mask:radial-gradient(circle 9px at 0 50%,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,#0000 97%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 9px at 0 50%,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,#0000 97%,#000) right/51% 100% no-repeat}.ds-los::before{content:'';position:absolute;left:14px;top:10px;bottom:10px;border-left:2px dotted rgb(27 31 58/.35)}.ds-los{padding-top:32px;min-height:108px;display:flex;flex-direction:column;justify-content:flex-end}.ds-aktiv{background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='18'%3E%3Cg fill='none' stroke='%231b1f3a' stroke-opacity='.11'%3E%3Cpath d='M0 9C9 1 27 1 36 9S63 17 72 9'/%3E%3Cpath d='M0 9C9 17 27 17 36 9S63 1 72 9'/%3E%3C/g%3E%3C/svg%3E\")}.ds-serie{position:absolute;top:10px;right:14px;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.04em;color:var(--druckblau,#2440a8);font-variant-numeric:tabular-nums}.ds-titel{position:relative;align-self:flex-start;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;font-stretch:80%;font-size:2.3rem;line-height:1.05}.ds-kreis{position:absolute;inset:-9px -14px;width:calc(100% + 28px);height:calc(100% + 18px);overflow:visible;animation:ds-kreis .45s cubic-bezier(.16,1,.3,1) both}.ds-kreis path{fill:none;stroke:var(--druckblau,#2440a8);stroke-width:2.5;stroke-linecap:round;vector-effect:non-scaling-stroke}.ds-text{margin-top:4px;font-size:.95rem;line-height:1.35;color:var(--tinte-2,#3b3f63)}@keyframes ds-kreis{from{clip-path:inset(-12px 100% -12px -12px)}to{clip-path:inset(-12px)}}@media (prefers-reduced-motion:reduce){.ds-kreis{animation:none}}"
+    },
+    {
+      "name": "Drink Row (you)",
+      "kind": "custom",
+      "refersTo": "drink-row-you",
+      "description": "The only red surface: the current player's row in the drink list.",
+      "html": "<div class=\"ds-trink\"><span class=\"ds-av\">M</span><span class=\"ds-name\">Du trinkst</span><span class=\"ds-n\">2 Schlucke</span></div>",
+      "css": ".ds-trink{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;min-height:60px;padding:8px 16px 8px 10px;border-radius:12px;background:var(--rot,#d7263d);color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif}.ds-av{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--rosa,#f4a7be);color:var(--tinte,#1b1f3a);font-weight:800}.ds-name{font-weight:800;font-size:1.4rem}.ds-n{font-weight:800;font-size:1.35rem;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Results Board",
+      "kind": "custom",
+      "refersTo": "row",
+      "description": "Fixed-cell rank table; tied leaders each get the lemon winner ticket.",
+      "html": "<div class=\"ds-tafel\"><div class=\"ds-los ds-zeile ds-sieger\"><span class=\"ds-platz\">1</span><span class=\"ds-av2\">T</span><span class=\"ds-nm\">Thanh</span><span class=\"ds-zahl\">21</span></div><div class=\"ds-zeile\"><span class=\"ds-platz\">2</span><span class=\"ds-av2\" style=\"background:#b9b4f5;color:#1b1f3a\">J</span><span class=\"ds-nm\">Jana</span><span class=\"ds-zahl\">10</span></div></div>",
+      "css": ".ds-los{--los:var(--zitrone,#f6e27a);position:relative;padding:16px 18px 16px 30px;border-radius:6px;background-color:var(--los);color:var(--tinte,#1b1f3a);font-family:'Be Vietnam Pro',system-ui,sans-serif;-webkit-mask:radial-gradient(circle 9px at 0 50%,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,#0000 97%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 9px at 0 50%,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,#0000 97%,#000) right/51% 100% no-repeat}.ds-los::before{content:'';position:absolute;left:14px;top:10px;bottom:10px;border-left:2px dotted rgb(27 31 58/.35)}.ds-tafel{display:flex;flex-direction:column;gap:6px}.ds-zeile{display:grid;grid-template-columns:2.4rem auto 1fr 4.5rem;align-items:center;gap:12px;min-height:64px;padding:8px 16px 8px 12px;border-radius:12px;background:var(--nacht-2,#1e2342);color:var(--papier,#f3eedc);font-family:'Be Vietnam Pro',system-ui,sans-serif}.ds-zeile.ds-sieger{min-height:96px;padding:14px 20px 14px 30px;border-radius:6px;background-color:var(--zitrone,#f6e27a);color:var(--tinte,#1b1f3a)}.ds-platz,.ds-zahl{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;font-stretch:75%;line-height:1;font-variant-numeric:tabular-nums}.ds-platz{font-size:1.8rem;color:var(--papier-2,#cfc9e3)}.ds-zahl{font-size:2.2rem;text-align:right}.ds-sieger .ds-platz{font-size:2.8rem;color:var(--druckblau,#2440a8)}.ds-sieger .ds-zahl{font-size:3rem}.ds-sieger .ds-nm{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;font-size:1.6rem}.ds-av2{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--tinte,#1b1f3a);color:var(--zitrone,#f6e27a);font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Night Ticket Seller",
+    "overview": "A deep night ground, and on it one bright printed lottery ticket at a time. Every round is a freshly drawn vé số; the reveal is the draw, with numbers rolling and then landing. The phone is a private controller in a dim room, so the screen stays calm and dark, and only the one ticket that matters right now glows.\n\nDensity is low and thumb-first: one column, at most 520px wide, big tap targets (44px minimum, 56px for main buttons), and the main action pinned at the bottom in the thumb zone. Depth comes from paper on night, never from shadows or glows. The world deliberately rejects the usual party-app look of dark neon purple with emoji tiles.\n\nEvery piece of the ticket is real ticket material: the coloured paper, a dotted tear-off edge, two half-round notches, fine wavy guilloche lines, a print-blue serial number, a pen circle for \"my pick\" and a punch hole for \"done\".",
+    "keyCharacteristics": [
+      "Night ground in three steps; surfaces lift by lightness, not lines.",
+      "Five paper colours plus cream, one per game and one per player.",
+      "Exactly one active ticket per screen; everything else is quiet night.",
+      "Condensed Bricolage Grotesque for display and numbers, Be Vietnam Pro for reading; both cover Vietnamese.",
+      "Red means only \"you drink\".",
+      "Motion is the draw: tickets slide in, digits roll, circles get scribbled, holes get punched. All of it collapses to instant under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The Red Means You Drink Rule",
+        "body": "Ink red is used for one thing only: the current player's row in the \"who drinks\" list. If anything else turns red, the signal is lost.",
+        "section": "colors"
+      },
+      {
+        "name": "The Six Papers Rule",
+        "body": "Game tickets and avatars use only the six papers. A new game picks one of them; a seventh player wraps back to lemon. No new hues.",
+        "section": "colors"
+      },
+      {
+        "name": "The Print Ink Rule",
+        "body": "Print blue lives on paper, never on night. On night, the accent is lemon.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Faces Rule",
+        "body": "Only these two families. Any new face must render Vietnamese diacritics (ạ, ồ, ữ).",
+        "section": "typography"
+      },
+      {
+        "name": "The Big Numbers Rule",
+        "body": "Counts and ranks are set in the condensed display face, never in body text. Numbers are the drama of the draw.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper On Night Rule",
+        "body": "If something needs to stand out, make it paper. If it needs to recede, make it a lighter night. Never add a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do let exactly one ticket own each screen. In a round, when a reveal ticket appears (liar, estimate) or the A/B ticket is the round's ticket, the question drops its paper and becomes plain cream text above it. The game menu is a sheet of tickets to choose from; there only the chosen one is active.",
+      "Do put guilloche only on the active ticket: the selected game, the question, the card, the reveal, the winner, the chosen A/B half.",
+      "Do mark selection with the pen circle and \"done\" with the punch hole.",
+      "Do print serial numbers in print blue in the ticket's top-right corner.",
+      "Do colour avatars with the six papers by join order.",
+      "Do set every count and rank in the condensed display face with tabular figures.",
+      "Do give every animation a reduced-motion fallback: the stylesheet cuts all animations and transitions to 0.01ms, and the draw shows final numbers at once.",
+      "Do keep tap targets at least 44px, main buttons 56px, and the main action in the bottom bar."
+    ],
+    "donts": [
+      "Don't use red (rot) for anything except the \"you drink\" row: not for errors, not for warnings, not for emphasis.",
+      "Don't put two notched tickets in a round screen, or guilloche on anything but the active ticket (tied winners on the results board are the one exception: each gets the winner ticket).",
+      "Don't add shadows, glows or visible gradients; the only gradients in the CSS are masks that cut the notches.",
+      "Don't use emoji or text glyphs as icons; icons are inline SVG strokes.",
+      "Don't put small uppercase labels (eyebrows) above headings.",
+      "Don't use a font without Vietnamese support.",
+      "Don't use print blue on night or plain grey text; secondary text is lilac grey."
+    ]
+  }
+}
