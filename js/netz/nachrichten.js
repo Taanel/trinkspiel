@@ -22,6 +22,7 @@ export const ABGELEHNT = 'abgelehnt'; // { typ, grund }  z. B. 'voll' oder 'entf
 export const AKTIONEN = {
   eingabe: { nurGastgeber: false }, // Eingabe in der Runde (Stimme, Antwort, Zahl)
   verstanden: { nurGastgeber: false }, // "Verstanden" auf dem Erklär-Bildschirm
+  getraenk: { nurGastgeber: false }, // Bier, Mix oder Shot wählen
   spielWaehlen: { nurGastgeber: true },
   rundenAnzahl: { nurGastgeber: true },
   starten: { nurGastgeber: true },

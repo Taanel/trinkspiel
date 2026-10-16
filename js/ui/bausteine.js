@@ -10,7 +10,7 @@
 // "data-merk" gibt Elementen einen festen Namen. So erkennt main.js beim Neuzeichnen,
 // welche Elemente schon da waren, und spielt deren Animation nicht noch einmal ab.
 
-import { el } from './helfer.js';
+import { el, ikon } from './helfer.js';
 import { t, schlucke } from '../sprache/index.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -105,19 +105,19 @@ export function gewartet(text = t('runde.gewaehlt')) {
   return el('p', { class: 'hinweis-gewaehlt' }, text);
 }
 
-// Ergebnis: Wer trinkt wie viel. schluckTabelle = { spielerId: anzahl }
+// Ergebnis: Wer trinkt wie viel, jeweils in seinem Getränk.
+// ergebnis.getrunken = { spielerId: { schlucke, getraenk } } (berechnet in spiel/ablauf.js)
 // Die Zeile des eigenen Handys wird hervorgehoben (rot = du trinkst).
-export function trinkListe(sicht, schluckTabelle) {
-  const eintraege = Object.entries(schluckTabelle)
-    .filter(([, n]) => n > 0)
-    .sort((a, b) => b[1] - a[1]);
+export function trinkListe(sicht, ergebnis) {
+  const getrunken = ergebnis.getrunken ?? {};
+  const eintraege = Object.entries(getrunken).sort((a, b) => (ergebnis.punkte[b[0]] ?? 0) - (ergebnis.punkte[a[0]] ?? 0));
   if (eintraege.length === 0) {
     return el('p', { class: 'niemand-trinkt', text: t('runde.niemandTrinkt') });
   }
   return el(
     'ul',
     { class: 'trink-liste', 'aria-label': t('runde.werTrinkt') },
-    eintraege.map(([id, n]) => {
+    eintraege.map(([id, { schlucke: n, getraenk }]) => {
       const s = spielerNach(sicht, id);
       const ich = id === sicht.ich;
       return el(
@@ -125,9 +125,41 @@ export function trinkListe(sicht, schluckTabelle) {
         { class: 'trink-zeile' + (ich ? ' ich' : '') },
         avatar(s),
         el('span', { class: 'trink-name', text: ich ? t('runde.duTrinkst') : s.name }),
-        el('span', { class: 'trink-anzahl', 'data-roll': '', text: schlucke(n) }),
+        el('span', { class: 'trink-anzahl' }, getraenkIkon(getraenk), el('span', { 'data-roll': '', text: schlucke(n, getraenk) })),
       );
     }),
+  );
+}
+
+// Kleines Getränke-Icon mit Namen für Screenreader.
+export function getraenkIkon(getraenk) {
+  if (!getraenk) return null;
+  const svg = ikon(getraenk);
+  svg.setAttribute('aria-hidden', 'false');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', t(`getraenk.${getraenk}`));
+  return svg;
+}
+
+// Auswahl Bier / Mix / Shot: drei große Kacheln, die gewählte wird eingekreist.
+export function getraenkWahl(gewaehlt, beiWahl) {
+  return el(
+    'div',
+    { class: 'getraenk-wahl', role: 'group', 'aria-label': t('getraenk.frage') },
+    ['bier', 'mix', 'shot'].map((g) =>
+      el(
+        'button',
+        {
+          type: 'button',
+          class: 'getraenk-knopf' + (g === gewaehlt ? ' gewaehlt' : ''),
+          'aria-pressed': String(g === gewaehlt),
+          onclick: () => beiWahl(g),
+        },
+        ikon(g),
+        el('span', { class: 'getraenk-name', text: t(`getraenk.${g}`) }),
+        g === gewaehlt && stiftKreis(`getraenk-${g}`),
+      ),
+    ),
   );
 }
 

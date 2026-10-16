@@ -61,9 +61,9 @@ export function t(schluessel, werte = {}) {
   return text;
 }
 
-// "1 Schluck" / "3 Schlucke" (jede Sprache entscheidet selbst über die Mehrzahl).
-export function schlucke(anzahl) {
-  return t('schlucke', { n: anzahl });
+// "1 Schluck Bier" / "3 Schlucke vom Shot" (jede Sprache entscheidet selbst über die Mehrzahl).
+export function schlucke(anzahl, getraenk) {
+  return t('schlucke', { n: anzahl, g: getraenk });
 }
 
 // Text eines Fragen-Eintrags in der aktuellen Sprache.

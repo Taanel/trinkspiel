@@ -45,11 +45,11 @@ export default {
       zaehlung[gewaehlt] = (zaehlung[gewaehlt] ?? 0) + 1;
     }
     const meiste = Math.max(0, ...Object.values(zaehlung));
-    const schlucke = {};
+    const punkte = {};
     for (const [id, anzahl] of Object.entries(zaehlung)) {
-      if (anzahl === meiste) schlucke[id] = anzahl;
+      if (anzahl === meiste) punkte[id] = anzahl;
     }
-    return { zaehlung, schlucke };
+    return { zaehlung, punkte };
   },
 
   // ---------- 2. SICHT ----------
@@ -88,7 +88,7 @@ export default {
             ),
           ),
         ),
-        B.trinkListe(sicht, r.ergebnis.schlucke),
+        B.trinkListe(sicht, r.ergebnis),
       );
     }
 

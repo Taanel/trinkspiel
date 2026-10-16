@@ -112,6 +112,7 @@ export function starteGastgeber({ ich, fortsetzen, beiSicht, beiStatus }) {
     switch (art) {
       case 'eingabe': A.rundenEingabe(zustand, spielerId, wert); break;
       case 'verstanden': A.verstanden(zustand, spielerId); break;
+      case 'getraenk': A.waehleGetraenk(zustand, spielerId, wert); break;
       case 'spielWaehlen': A.waehleSpiel(zustand, wert); break;
       case 'rundenAnzahl': A.setzeRundenAnzahl(zustand, wert); break;
       case 'starten': A.spielStarten(zustand); break;

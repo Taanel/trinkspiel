@@ -9,7 +9,7 @@ Ein Trinkspiel für Freunde. Jeder spielt mit dem **eigenen Handy**, in seiner S
 1. Eine Person (der **Gastgeber**) öffnet die Seite, gibt ihren Namen ein und tippt **„Neuen Raum erstellen“**.
 2. Die anderen scannen den **QR-Code**, öffnen den geteilten **Link** oder geben den **4-Buchstaben-Code** ein.
 3. Der Gastgeber wählt ein Spiel und die Rundenzahl und startet.
-4. Vor jedem Spiel erklärt ein Bildschirm in 3–4 Schritten, wie es geht. Alle tippen „Verstanden“.
+4. Vor jedem Spiel erklärt ein Bildschirm in 3–4 Schritten, wie es geht. Dort wählt jeder auch sein Getränk (Bier, Mix oder Shot) und tippt dann „Verstanden“.
 5. Am Ende zeigt die Tafel, wer am meisten getrunken hat.
 
 | Spiel | Worum es geht |
@@ -20,6 +20,18 @@ Ein Trinkspiel für Freunde. Jeder spielt mit dem **eigenen Handy**, in seiner S
 | Der Lügner | Eine Person hat heimlich eine andere Frage. Findet sie! |
 | Schätzfrage | Zahl schätzen. Wer am weitesten weg liegt, trinkt |
 | Karten | Ich hab noch nie, Pflicht-Aufgaben und Regeln |
+
+**Getränke und Schlucke**
+
+Die Spielregeln vergeben Punkte (z. B. „Minderheit: 2“). Je nach Getränk wird daraus eine andere Zahl Schlucke, weil Shots stärker sind als Bier:
+
+| Getränk | Umrechnung | Beispiel: 3 Punkte |
+|---|---|---|
+| Bier | 1 Punkt = 1 Schluck | 3 Schlucke Bier |
+| Mix | etwa ⅔, aufgerundet | 2 Schlucke Mix |
+| Shot | etwa ⅓, aufgerundet | 1 Schluck vom Shot |
+
+Wer trinken muss, trinkt immer mindestens 1 Schluck. Die Rangliste am Ende zählt die Punkte, damit es fair bleibt. Die Werte kannst du in `js/spiel/getraenke.js` ändern.
 
 **Gut zu wissen**
 - Das Gastgeber-Handy ist der „Server“. Wenn der Gastgeber die Seite schließt, pausiert das Spiel. Lädt er neu, tippt er auf „Spiel fortsetzen“, und die anderen verbinden sich automatisch wieder.
@@ -46,7 +58,7 @@ fragen/                 ALLE Fragen, je Eintrag in de / en / vi
 js/
   main.js               Einstieg: verbindet alles
   netz/                 Verbindung zwischen den Handys (PeerJS)
-  spiel/                Spielablauf und Spielzustand (nur Logik, kein Bildschirm)
+  spiel/                Spielablauf, Spielzustand, Getränke-Umrechnung (nur Logik, kein Bildschirm)
   runden/               eine Datei pro Spiel (Regeln + Bildschirm)
   sprache/              Texte der Oberfläche: de.js, en.js, vi.js
   ui/                   Bildschirme, Bausteine, Animationen, QR-Code

@@ -10,7 +10,7 @@ import { frageNachId } from '../spiel/fragen.js';
 import * as B from '../ui/bausteine.js';
 
 const ID = 'schaetzfrage';
-const SCHLUCKE_WEITESTE = 3;
+const PUNKTE_WEITESTE = 3;
 
 // Zahl schön formatiert, z. B. 1.500.000 (de) oder 1,500,000 (en).
 // Jahreszahlen ohne Tausender-Punkt (1989, nicht 1.989): "format": "jahr" in der Fragen-Datei.
@@ -45,17 +45,17 @@ export default {
       .map(([id, wert]) => ({ id, wert, abstand: Math.abs(wert - runde.antwort) }))
       .sort((a, b) => a.abstand - b.abstand);
 
-    const schlucke = {};
+    const punkte = {};
     let beste = [];
     if (liste.length > 1) {
       const kleinster = liste[0].abstand;
       const groesster = liste[liste.length - 1].abstand;
       if (kleinster !== groesster) {
         beste = liste.filter((e) => e.abstand === kleinster).map((e) => e.id);
-        for (const e of liste) if (e.abstand === groesster) schlucke[e.id] = SCHLUCKE_WEITESTE;
+        for (const e of liste) if (e.abstand === groesster) punkte[e.id] = PUNKTE_WEITESTE;
       }
     }
-    return { antwort: runde.antwort, liste, beste, schlucke };
+    return { antwort: runde.antwort, liste, beste, punkte };
   },
 
   // ---------- 2. SICHT ----------
@@ -87,7 +87,7 @@ export default {
           erg.liste.map((e, i) => {
             const s = B.spielerNach(sicht, e.id);
             return el('li', {
-              class: 'schaetz-zeile' + (erg.beste.includes(e.id) ? ' beste' : '') + (erg.schlucke[e.id] ? ' weiteste' : ''),
+              class: 'schaetz-zeile' + (erg.beste.includes(e.id) ? ' beste' : '') + (erg.punkte[e.id] ? ' weiteste' : ''),
               style: { '--i': i },
             },
             B.avatar(s),
@@ -100,7 +100,7 @@ export default {
         const namen = erg.beste.map((id) => B.spielerNach(sicht, id).name).join(', ');
         kinder.push(B.ergebnisText(t('spiele.schaetzfrage.verteilen', { name: namen })));
       }
-      kinder.push(B.trinkListe(sicht, erg.schlucke));
+      kinder.push(B.trinkListe(sicht, erg));
       return el('section', { class: 'runde' }, kinder);
     }
 

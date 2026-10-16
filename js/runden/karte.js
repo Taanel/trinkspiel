@@ -40,7 +40,7 @@ export default {
 
   auswerten(runde) {
     // Eine Regel-Karte ersetzt die bisher gültige Regel (siehe spiel/ablauf.js).
-    return { schlucke: {}, neueRegel: runde.art === 'regel' ? runde.frageId : null };
+    return { punkte: {}, neueRegel: runde.art === 'regel' ? runde.frageId : null };
   },
 
   // ---------- 2. SICHT ----------

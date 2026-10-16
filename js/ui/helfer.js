@@ -30,6 +30,10 @@ export function el(tag, eigenschaften = {}, ...kinder) {
 const IKONEN = {
   frage: 'M9 9a3 3 0 1 1 4.2 2.75c-.75.35-1.2 1.05-1.2 1.85V14.5M12 18h.01',
   kreuz: 'M7 7l10 10M17 7L7 17',
+  // Getränke
+  bier: 'M6 7h9v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zM15 10h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2M6 7c0-2 2-3 3.5-2C10 3 13 3 14 4.5 15 4 16 5.5 15 7M9.5 11v6M12.5 11v6',
+  mix: 'M4 4h16l-8 9zM12 13v7M8 20h8M14 2l3-1M16.5 1.5 14 7',
+  shot: 'M7 5h10l-1.6 15H8.6zM7.6 10h8.8',
 };
 export function ikon(name) {
   const ns = 'http://www.w3.org/2000/svg';

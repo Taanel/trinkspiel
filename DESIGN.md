@@ -225,7 +225,9 @@ A dark ink-blue night carrying bright, slightly chalky printed papers, with two 
 
 Mobile-first single column. Content is centred at max 520px with a 16px side margin (24px from 600px wide, plus 16px top padding). Screens stack with a 14px gap. The header is sticky at the top (64px minimum, room serial left, help and language toggle right; in rounds a second line shows game name and "Round 4/25"). The main action bar is fixed at the bottom (12px top padding, safe-area aware), and the page keeps 96px plus safe area free underneath it.
 
-Grids are simple: game tickets 2 by 2 with 10px gaps, with Party-Mix and Karten spanning both columns; player buttons 2 per row. The results board uses fixed columns (rank 2.4rem, avatar, name, count 4.5rem) so values line up like a printed draw board.
+Grids are simple: game tickets 2 by 2 with 10px gaps, with Party-Mix and Karten spanning both columns; player buttons 2 per row. The results board uses fixed columns (rank 2.4rem, avatar, name, count 4.5rem) so values line up like a printed draw board. Each name carries a small line with the player's drink icon and name; the board ranks by points, the count shows sips in that drink.
+
+Drink picker (explanation screen): three equal night-raised tiles (Bier, Mix, Shot) with a 38px lemon line icon and the name; the chosen tile gets night-high plus the pen circle. Drink icons share the 2.25 stroke of the other SVG icons. Drink rows in results stack name over amount, because "2 Schlucke vom Shot" needs the width.
 
 ## Elevation & Depth
 

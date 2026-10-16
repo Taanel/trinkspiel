@@ -1,7 +1,10 @@
 // English texts. Same keys as de.js and vi.js!
 
 export default {
-  schlucke: ({ n }) => (n === 1 ? '1 sip' : `${n} sips`),
+  schlucke: ({ n, g }) => {
+    const wort = n === 1 ? 'sip' : 'sips';
+    return { bier: `${n} ${wort} of beer`, mix: `${n} ${wort} of your mix`, shot: `${n} ${wort} of your shot` }[g] ?? `${n} ${wort}`;
+  },
 
   allgemein: {
     du: 'you',
@@ -69,6 +72,15 @@ export default {
     verlassenFrage: 'Really close the room? The game ends for everyone.',
   },
 
+  getraenk: {
+    frage: 'What are you drinking?',
+    hinweis: 'All alcoholic. With a mix or a shot you take fewer sips because they are stronger.',
+    zuerstWaehlen: 'Pick a drink first',
+    bier: 'Beer',
+    mix: 'Mix',
+    shot: 'Shot',
+  },
+
   erklaerung: {
     verstanden: 'Got it',
     warten: 'Starting soon, the others are still reading.',
@@ -93,7 +105,7 @@ export default {
 
   ende: {
     titel: 'Final results',
-    gesamt: ({ n }) => `${n === 1 ? '1 sip' : `${n} sips`} together. Một hai ba dô!`,
+    gesamt: ({ n }) => `${n} rounds played. Một hai ba dô!`,
     platz: 'Place',
     schlucke: 'Sips',
     nochmal: 'Play again',
@@ -166,7 +178,7 @@ export default {
       schritte: [
         'A card appears for everyone at the same time.',
         'Never have I ever …: whoever has done it drinks.',
-        'Dare: the named person does it or drinks 3.',
+        'Dare: the named person does it or drinks (3 sips of beer, 2 of a mix or 1 of a shot).',
         'Rule: holds until the next rule. Whoever breaks it drinks.',
       ],
       arten: {
@@ -176,7 +188,7 @@ export default {
       },
       unterzeile: {
         nie: 'Whoever has done it drinks.',
-        pflicht: 'Do it, or drink 3 sips.',
+        pflicht: 'Do it, or drink: 3 sips of beer, 2 of your mix or 1 of your shot.',
         regel: 'Holds from now until the next rule. Break it and drink.',
       },
     },

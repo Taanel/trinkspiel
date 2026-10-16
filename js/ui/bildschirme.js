@@ -218,6 +218,7 @@ function lobbyBildschirm(app) {
         B.avatar(s),
         el('span', { text: s.id === sicht.ich ? `${s.name} (${t('allgemein.du')})` : s.name }),
         s.id === sicht.gastgeberId && el('span', { class: 'chip-zusatz', text: t('lobby.gastgeber') }),
+        B.getraenkIkon(s.getraenk),
         !s.verbunden && el('span', { class: 'chip-zusatz', text: t('lobby.offline') }),
         sicht.istGastgeber && s.id !== sicht.ich &&
           el('button', {
@@ -341,9 +342,15 @@ function erklaerBildschirm(app) {
     'main',
     { class: 'erklaerung' },
     erklaerung(sicht.erklaerTyp),
+    // Jeder wählt, was er trinkt. Danach werden die Schlucke passend umgerechnet (spiel/getraenke.js).
+    el('h2', { class: 'abschnitt', text: t('getraenk.frage') }),
+    B.getraenkWahl(ich.getraenk, (g) => tun.aktion('getraenk', g)),
+    el('p', { class: 'anleitung', text: t('getraenk.hinweis') }),
     B.fortschritt(sicht, verstanden),
     aktionsLeiste(
-      ich.verstanden ? B.gewartet(t('erklaerung.warten')) : knopf(t('erklaerung.verstanden'), () => tun.aktion('verstanden')),
+      ich.verstanden
+        ? B.gewartet(t('erklaerung.warten'))
+        : knopf(ich.getraenk ? t('erklaerung.verstanden') : t('getraenk.zuerstWaehlen'), () => tun.aktion('verstanden'), 'haupt', { disabled: !ich.getraenk }),
       sicht.istGastgeber && knopf(t('runde.nichtWarten'), () => tun.aktion('erzwingen'), 'zweit'),
     ),
   );
@@ -387,17 +394,17 @@ function rundenBildschirm(app) {
 
 function endBildschirm(app) {
   const { sicht, tun } = app;
-  const rangliste = [...sicht.spieler].sort((a, b) => b.schlucke - a.schlucke);
-  const gesamt = rangliste.reduce((summe, s) => summe + s.schlucke, 0);
-  const meiste = rangliste[0]?.schlucke ?? 0;
-  // Platz = 1 + Anzahl der Spieler mit MEHR Schlucken. Gleich viele Schlucke → gleicher Platz.
-  const platzVon = (s) => 1 + rangliste.filter((andere) => andere.schlucke > s.schlucke).length;
+  // Sortiert wird nach PUNKTEN (fair, egal ob Bier oder Shot). Angezeigt werden die Schlucke im eigenen Getränk.
+  const rangliste = [...sicht.spieler].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0));
+  const meiste = rangliste[0]?.punkte ?? 0;
+  // Platz = 1 + Anzahl der Spieler mit MEHR Punkten. Gleich viele Punkte → gleicher Platz.
+  const platzVon = (s) => 1 + rangliste.filter((andere) => (andere.punkte ?? 0) > (s.punkte ?? 0)).length;
 
   return el(
     'main',
     { class: 'ende' },
     el('h1', { class: 'titel klein', text: t('ende.titel') }),
-    el('p', { class: 'unterzeile', text: t('ende.gesamt', { n: gesamt }) }),
+    el('p', { class: 'unterzeile', text: t('ende.gesamt', { n: sicht.rundenGesamt }) }),
     // Ergebnistafel wie bei der Lotterie-Ziehung (bảng kết quả xổ số):
     // links der Platz, rechts die Zahl in einer festen Spalte.
     el('p', { class: 'tafel-kopf', 'aria-hidden': 'true' }, el('span', { text: t('ende.platz') }), el('span', { text: t('ende.schlucke') })),
@@ -408,14 +415,14 @@ function endBildschirm(app) {
         el(
           'li',
           {
-            // Alle, die gleich viele Schlucke wie der Erste haben, bekommen das Gewinner-Los
-            class: 'tafel-zeile' + (meiste > 0 && s.schlucke === meiste ? ' sieger' : '') + (s.id === sicht.ich ? ' ich' : ''),
-            'aria-label': `${platzVon(s)}. ${s.name}: ${schlucke(s.schlucke)}`,
+            // Alle, die gleich viele Punkte wie der Erste haben, bekommen das Gewinner-Los
+            class: 'tafel-zeile' + (meiste > 0 && s.punkte === meiste ? ' sieger' : '') + (s.id === sicht.ich ? ' ich' : ''),
+            'aria-label': `${platzVon(s)}. ${s.name}: ${schlucke(s.schlucke, s.getraenk)}`,
           },
           el('span', { class: 'tafel-platz', text: platzVon(s) }),
           B.avatar(s),
-          el('span', { class: 'tafel-name', text: s.name }),
-          el('span', { class: 'tafel-zahl', 'data-roll': '', text: s.schlucke }),
+          el('span', { class: 'tafel-name' }, s.name, el('span', { class: 'tafel-getraenk' }, B.getraenkIkon(s.getraenk), s.getraenk ? t(`getraenk.${s.getraenk}`) : '')),
+          el('span', { class: 'tafel-zahl', 'data-roll': '', text: s.schlucke ?? 0 }),
         ),
       ),
     ),

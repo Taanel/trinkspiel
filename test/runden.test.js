@@ -9,6 +9,7 @@ import { setzeFragen } from '../js/spiel/fragen.js';
 import { fragenDateien, rundenTyp } from '../js/runden/index.js';
 import { neuerZustand, spielerBeitreten, spielerGetrennt } from '../js/spiel/zustand.js';
 import * as A from '../js/spiel/ablauf.js';
+import { umrechnen } from '../js/spiel/getraenke.js';
 
 // Echte Fragen-Dateien laden, wie im Browser.
 const fragen = {};
@@ -38,7 +39,7 @@ test('Wer würde eher: meiste Stimmen trinkt so viele Schlucke wie Stimmen', () 
   assert.equal(typ.fertig(r, alle), false);
   typ.eingabe(r, 'd', 'b', alle);
   assert.equal(typ.fertig(r, alle), true);
-  assert.deepEqual(typ.auswerten(r).schlucke, { b: 3 });
+  assert.deepEqual(typ.auswerten(r).punkte, { b: 3 });
 });
 
 test('Wer würde eher: Gleichstand → alle an der Spitze trinken', () => {
@@ -49,7 +50,7 @@ test('Wer würde eher: Gleichstand → alle an der Spitze trinken', () => {
   typ.eingabe(r, 'b', 'a', alle);
   typ.eingabe(r, 'c', 'a', alle);
   typ.eingabe(r, 'd', 'b', alle);
-  assert.deepEqual(typ.auswerten(r).schlucke, { a: 2, b: 2 });
+  assert.deepEqual(typ.auswerten(r).punkte, { a: 2, b: 2 });
 });
 
 test('Wer würde eher: Sicht verrät nicht, wer wen gewählt hat', () => {
@@ -79,20 +80,20 @@ test('Mehrheit: Minderheit trinkt 2', () => {
   for (const [id, wahl] of [['a', 'a'], ['b', 'a'], ['c', 'b']]) typ.eingabe(r, id, wahl);
   const erg = typ.auswerten(r);
   assert.equal(erg.ausgang, 'minderheit');
-  assert.deepEqual(erg.schlucke, { c: 2 });
+  assert.deepEqual(erg.punkte, { c: 2 });
 });
 
 test('Mehrheit: Gleichstand → alle trinken 1, Einigkeit → niemand', () => {
   const typ = rundenTyp('mehrheit');
   const r = typ.erstelle([], fragen.mehrheit[0]);
   for (const [id, wahl] of [['a', 'a'], ['b', 'b']]) typ.eingabe(r, id, wahl);
-  assert.deepEqual(typ.auswerten(r).schlucke, { a: 1, b: 1 });
+  assert.deepEqual(typ.auswerten(r).punkte, { a: 1, b: 1 });
 
   const r2 = typ.erstelle([], fragen.mehrheit[0]);
   for (const id of ['a', 'b', 'c']) typ.eingabe(r2, id, 'b');
   const erg = typ.auswerten(r2);
   assert.equal(erg.ausgang, 'einig');
-  assert.deepEqual(erg.schlucke, {});
+  assert.deepEqual(erg.punkte, {});
 });
 
 // ---------- Der Lügner ----------
@@ -131,7 +132,7 @@ test('Lügner: nach allen Antworten geht es zum Abstimmen, erwischt → Lügner 
   assert.equal(typ.fertig(r, alle), true);
   const erg = typ.auswerten(r);
   assert.equal(erg.erwischt, true);
-  assert.deepEqual(erg.schlucke, { c: 3 });
+  assert.deepEqual(erg.punkte, { c: 3 });
 });
 
 test('Lügner: nicht erwischt (auch bei Gleichstand) → alle anderen trinken 2', () => {
@@ -143,7 +144,7 @@ test('Lügner: nicht erwischt (auch bei Gleichstand) → alle anderen trinken 2'
   typ.eingabe(r, 'd', 'c', alle);
   const erg = typ.auswerten(r);
   assert.equal(erg.erwischt, false);
-  assert.deepEqual(erg.schlucke, { a: 2, b: 2, d: 2 });
+  assert.deepEqual(erg.punkte, { a: 2, b: 2, d: 2 });
 });
 
 // ---------- Schätzfrage ----------
@@ -156,7 +157,7 @@ test('Schätzfrage: weiteste trinkt 3, beste wird genannt', () => {
   typ.eingabe(r, 'c', 'kein-wert'); // wird ignoriert
   typ.eingabe(r, 'c', 300);
   const erg = typ.auswerten(r);
-  assert.deepEqual(erg.schlucke, { c: 3 });
+  assert.deepEqual(erg.punkte, { c: 3 });
   assert.deepEqual(erg.beste, ['a']);
 });
 
@@ -165,7 +166,7 @@ test('Schätzfrage: alle gleich weit weg → niemand trinkt', () => {
   const r = typ.erstelle([], { id: 'x', antwort: 100 });
   typ.eingabe(r, 'a', 90);
   typ.eingabe(r, 'b', 110);
-  assert.deepEqual(typ.auswerten(r).schlucke, {});
+  assert.deepEqual(typ.auswerten(r).punkte, {});
 });
 
 test('Schätzfrage: Antwort wird erst mit dem Ergebnis verschickt', () => {
@@ -182,6 +183,13 @@ test('Ablauf: Spiel mit Erklärung, Runden, Schlucke und Ende', () => {
   A.setzeRundenAnzahl(z, 15);
   assert.equal(A.spielStarten(z), true);
   assert.equal(z.phase, 'erklaerung');
+  // Ohne Getränk geht "Verstanden" nicht
+  A.verstanden(z, 'anna');
+  assert.equal(z.spieler.find((s) => s.id === 'anna').verstanden, false);
+  A.waehleGetraenk(z, 'anna', 'bier');
+  A.waehleGetraenk(z, 'ben', 'mix');
+  A.waehleGetraenk(z, 'cem', 'shot');
+  A.waehleGetraenk(z, 'cem', 'wodka-pur'); // gibt es nicht → bleibt Shot
   for (const id of ['anna', 'ben', 'cem']) A.verstanden(z, id);
   assert.equal(z.phase, 'runde');
 
@@ -189,7 +197,11 @@ test('Ablauf: Spiel mit Erklärung, Runden, Schlucke und Ende', () => {
   A.rundenEingabe(z, 'ben', 'a');
   A.rundenEingabe(z, 'cem', 'b');
   assert.ok(z.runde.ergebnis);
-  assert.equal(z.spieler.find((s) => s.id === 'cem').schlucke, 2);
+  // cem ist Minderheit: 2 Punkte, trinkt Shot → 1 Schluck vom Shot
+  const cem = z.spieler.find((s) => s.id === 'cem');
+  assert.equal(cem.punkte, 2);
+  assert.equal(cem.schlucke, 1);
+  assert.deepEqual(z.runde.ergebnis.getrunken, { cem: { schlucke: 1, getraenk: 'shot' } });
 
   // Restliche Runden mit "Nicht mehr warten" durchklicken: keine Erklärung mehr dazwischen
   for (let i = 0; i < 14; i++) {
@@ -249,4 +261,12 @@ test('Sicht: Mitspieler sehen fremde Eingaben nicht', () => {
   assert.equal(sicht.istGastgeber, false);
   assert.equal(sicht.runde.meineStimme, null);
   assert.ok(!('stimmen' in sicht.runde));
+});
+
+test('Getränke: Punkte werden je nach Getränk in Schlucke umgerechnet', () => {
+  assert.deepEqual([1, 2, 3, 4, 6].map((p) => umrechnen(p, 'bier')), [1, 2, 3, 4, 6]);
+  assert.deepEqual([1, 2, 3, 4, 6].map((p) => umrechnen(p, 'mix')), [1, 2, 2, 3, 4]);
+  assert.deepEqual([1, 2, 3, 4, 6].map((p) => umrechnen(p, 'shot')), [1, 1, 1, 2, 2]);
+  assert.equal(umrechnen(0, 'shot'), 0);
+  assert.equal(umrechnen(3, undefined), 3); // ohne Wahl wie Bier
 });

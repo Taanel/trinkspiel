@@ -9,8 +9,8 @@ import { frageNachId } from '../spiel/fragen.js';
 import * as B from '../ui/bausteine.js';
 
 const ID = 'mehrheit';
-const SCHLUCKE_MINDERHEIT = 2;
-const SCHLUCKE_GLEICHSTAND = 1;
+const PUNKTE_MINDERHEIT = 2;
+const PUNKTE_GLEICHSTAND = 1;
 
 export default {
   id: ID,
@@ -35,19 +35,19 @@ export default {
   auswerten(runde) {
     const a = Object.keys(runde.wahl).filter((id) => runde.wahl[id] === 'a');
     const b = Object.keys(runde.wahl).filter((id) => runde.wahl[id] === 'b');
-    const schlucke = {};
+    const punkte = {};
     let ausgang;
     if (a.length === b.length) {
       ausgang = 'gleichstand';
-      for (const id of [...a, ...b]) schlucke[id] = SCHLUCKE_GLEICHSTAND;
+      for (const id of [...a, ...b]) punkte[id] = PUNKTE_GLEICHSTAND;
     } else if (a.length === 0 || b.length === 0) {
       ausgang = 'einig'; // alle gleicher Meinung → niemand trinkt
     } else {
       ausgang = 'minderheit';
       const minderheit = a.length < b.length ? a : b;
-      for (const id of minderheit) schlucke[id] = SCHLUCKE_MINDERHEIT;
+      for (const id of minderheit) punkte[id] = PUNKTE_MINDERHEIT;
     }
-    return { a, b, ausgang, schlucke };
+    return { a, b, ausgang, punkte };
   },
 
   // ---------- 2. SICHT ----------
@@ -92,7 +92,7 @@ export default {
 
     if (r.ergebnis) {
       kinder.push(B.ergebnisText(t(`spiele.mehrheit.ausgang.${r.ergebnis.ausgang}`)));
-      kinder.push(B.trinkListe(sicht, r.ergebnis.schlucke));
+      kinder.push(B.trinkListe(sicht, r.ergebnis));
     } else {
       if (r.meineWahl) kinder.push(B.gewartet());
       kinder.push(B.fortschritt(sicht, r.fertig));

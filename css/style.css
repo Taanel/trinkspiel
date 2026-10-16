@@ -988,6 +988,93 @@ main {
   animation: hochziehen 0.35s var(--ease-raus) both;
 }
 
+/* ---------- Getränke-Wahl (auf dem Erklär-Bildschirm) ---------- */
+.getraenk-wahl {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.getraenk-knopf {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  min-height: 112px;
+  padding: 14px 6px 12px;
+  border: 0;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+  text-align: center;
+  transition: background-color 0.2s, transform 0.15s var(--ease-raus);
+}
+
+.getraenk-knopf:active {
+  transform: scale(0.96);
+}
+
+.getraenk-knopf.gewaehlt {
+  background: var(--nacht-3);
+}
+
+.getraenk-knopf .ikon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 4px;
+  color: var(--zitrone);
+}
+
+.getraenk-name {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.2rem;
+  line-height: 1.1;
+}
+
+
+/* Getränke-Icon klein neben Namen und Zahlen */
+.spieler-chip .ikon,
+.trink-anzahl .ikon,
+.tafel-getraenk .ikon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.spieler-chip .ikon {
+  margin-right: 6px;
+  color: var(--papier-2);
+}
+
+.trink-anzahl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tafel-getraenk {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  font-family: var(--schrift-text);
+  font-weight: 400;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  color: var(--papier-2);
+}
+
+.tafel-zeile.sieger .tafel-getraenk {
+  color: var(--tinte-2);
+}
+
+.tafel-name {
+  display: flex;
+  flex-direction: column;
+}
+
 /* ---------- Ende: Ergebnistafel (wie eine Xổ-số-Ergebnistafel) ---------- */
 .tafel-kopf {
   display: flex;
@@ -1439,26 +1526,34 @@ button.seite:active {
   gap: 8px;
 }
 
+/* Name oben, Menge darunter: "2 Schlucke vom Shot" braucht Platz */
 .trink-zeile {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 12px;
+  column-gap: 12px;
+  row-gap: 0;
   min-height: 60px;
   padding: 8px 16px 8px 10px;
   border-radius: var(--radius-flaeche);
   background: var(--nacht-3);
 }
 
+.trink-zeile .avatar {
+  grid-row: span 2;
+}
+
 .trink-name {
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  line-height: 1.2;
 }
 
 .trink-anzahl {
   font-family: var(--schrift-anzeige);
   font-weight: 800;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
+  line-height: 1.2;
 }
 
 /* DU trinkst: die einzige rote Fläche im ganzen Spiel */
@@ -1470,7 +1565,11 @@ button.seite:active {
 .trink-zeile.ich .trink-name {
   font-family: var(--schrift-anzeige);
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.15rem;
+}
+
+.trink-zeile.ich .trink-anzahl {
+  font-size: 1.5rem;
 }
 
 /* Karten */

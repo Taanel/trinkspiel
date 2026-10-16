@@ -2,7 +2,10 @@
 // {name}, {n} usw. werden beim Anzeigen ersetzt (siehe sprache/index.js).
 
 export default {
-  schlucke: ({ n }) => (n === 1 ? '1 Schluck' : `${n} Schlucke`),
+  schlucke: ({ n, g }) => {
+    const wort = n === 1 ? 'Schluck' : 'Schlucke';
+    return { bier: `${n} ${wort} Bier`, mix: `${n} ${wort} Mix`, shot: `${n} ${wort} vom Shot` }[g] ?? `${n} ${wort}`;
+  },
 
   allgemein: {
     du: 'du',
@@ -70,6 +73,15 @@ export default {
     verlassenFrage: 'Raum wirklich schließen? Dann endet das Spiel für alle.',
   },
 
+  getraenk: {
+    frage: 'Was trinkst du?',
+    hinweis: 'Alles mit Alkohol. Bei Mix und Shot trinkst du weniger Schlucke, weil sie stärker sind.',
+    zuerstWaehlen: 'Erst Getränk wählen',
+    bier: 'Bier',
+    mix: 'Mix',
+    shot: 'Shot',
+  },
+
   erklaerung: {
     verstanden: 'Verstanden',
     warten: 'Gleich geht’s los, die anderen lesen noch.',
@@ -94,7 +106,7 @@ export default {
 
   ende: {
     titel: 'Endergebnis',
-    gesamt: ({ n }) => `Zusammen ${n === 1 ? '1 Schluck' : `${n} Schlucke`}. Một hai ba dô!`,
+    gesamt: ({ n }) => `${n} Runden gespielt. Một hai ba dô!`,
     platz: 'Platz',
     schlucke: 'Schlucke',
     nochmal: 'Nochmal spielen',
@@ -167,7 +179,7 @@ export default {
       schritte: [
         'Eine Karte erscheint bei allen gleichzeitig.',
         'Ich hab noch nie …: Wer es schon gemacht hat, trinkt.',
-        'Pflicht: Die genannte Person macht die Aufgabe oder trinkt 3.',
+        'Pflicht: Die genannte Person macht die Aufgabe oder trinkt (3 Schlucke Bier, 2 Mix oder 1 vom Shot).',
         'Regel: Gilt, bis die nächste Regel kommt. Wer sie bricht, trinkt.',
       ],
       arten: {
@@ -177,7 +189,7 @@ export default {
       },
       unterzeile: {
         nie: 'Wer es schon getan hat, trinkt.',
-        pflicht: 'Mach es, oder trink 3 Schlucke.',
+        pflicht: 'Mach es, oder trink: 3 Schlucke Bier, 2 Mix oder 1 vom Shot.',
         regel: 'Gilt ab jetzt bis zur nächsten Regel. Wer sie bricht, trinkt.',
       },
     },

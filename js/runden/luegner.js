@@ -17,8 +17,8 @@ import * as B from '../ui/bausteine.js';
 
 const ID = 'luegner';
 const MAX_ZEICHEN = 40;
-const SCHLUCKE_ERWISCHT = 3;
-const SCHLUCKE_ENTKOMMEN = 2;
+const PUNKTE_ERWISCHT = 3;
+const PUNKTE_ENTKOMMEN = 2;
 
 // Holt aus einem Fragen-Eintrag eine Variante ('echt' oder 'luege') in allen Sprachen:
 // { de: '...', en: '...', vi: '...' }
@@ -92,11 +92,11 @@ export default {
     // Erwischt nur, wenn der Lügner ALLEIN die meisten Stimmen hat.
     const erwischt = anDerSpitze.length === 1 && anDerSpitze[0] === runde.luegnerId;
 
-    const schlucke = {};
-    if (erwischt) schlucke[runde.luegnerId] = SCHLUCKE_ERWISCHT;
-    else for (const id of runde.teilnehmer) if (id !== runde.luegnerId) schlucke[id] = SCHLUCKE_ENTKOMMEN;
+    const punkte = {};
+    if (erwischt) punkte[runde.luegnerId] = PUNKTE_ERWISCHT;
+    else for (const id of runde.teilnehmer) if (id !== runde.luegnerId) punkte[id] = PUNKTE_ENTKOMMEN;
 
-    return { erwischt, zaehlung, luegnerId: runde.luegnerId, schlucke };
+    return { erwischt, zaehlung, luegnerId: runde.luegnerId, punkte };
   },
 
   // ---------- 2. SICHT ----------
@@ -210,7 +210,7 @@ export default {
         ),
         liste,
         B.ergebnisText(t(erg.erwischt ? 'spiele.luegner.erwischt' : 'spiele.luegner.entkommen', { name: luegner.name })),
-        B.trinkListe(sicht, erg.schlucke),
+        B.trinkListe(sicht, erg),
       );
     } else {
       kinder.push(

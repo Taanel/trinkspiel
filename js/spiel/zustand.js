@@ -43,7 +43,15 @@ export function spielerBeitreten(zustand, { id, name }) {
     return true;
   }
   if (zustand.spieler.length >= MAX_SPIELER) return false;
-  zustand.spieler.push({ id, name: sauberName, verbunden: true, schlucke: 0, verstanden: false });
+  zustand.spieler.push({
+    id,
+    name: sauberName,
+    verbunden: true,
+    getraenk: null, // 'bier' | 'mix' | 'shot', wählt jeder auf dem Erklär-Bildschirm
+    punkte: 0, // für die Rangliste (unabhängig vom Getränk)
+    schlucke: 0, // was wirklich getrunken wurde, im eigenen Getränk
+    verstanden: false,
+  });
   return true;
 }
 

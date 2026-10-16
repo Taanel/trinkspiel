@@ -9,6 +9,7 @@ import { RUNDEN_TYPEN, KARTEN_ID, MIX_ID, rundenTyp } from '../runden/index.js';
 import { fragenFuer } from './fragen.js';
 import { mischen, zufaelligesElement } from './zufall.js';
 import { aktiveSpieler, RUNDEN_AUSWAHL } from './zustand.js';
+import { istGetraenk, umrechnen } from './getraenke.js';
 
 // Im Party-Mix kommt jede KARTEN_ALLE-te Runde eine Karte.
 const KARTEN_ALLE = 4;
@@ -36,7 +37,10 @@ export function setzeRundenAnzahl(zustand, anzahl) {
 
 export function spielStarten(zustand) {
   if (!verfuegbareSpiele(zustand).includes(zustand.auswahl.spiel)) return false;
-  for (const s of zustand.spieler) s.schlucke = 0;
+  for (const s of zustand.spieler) {
+    s.schlucke = 0;
+    s.punkte = 0;
+  }
   zustand.plan = erstellePlan(zustand.auswahl.spiel, zustand.auswahl.rundenAnzahl, aktiveSpieler(zustand).length);
   zustand.rundeNr = 0;
   zustand.runde = null;
@@ -121,11 +125,19 @@ function waehleFrage(zustand, typId) {
   return frage;
 }
 
+// Ein Spieler wählt sein Getränk (auf dem Erklär-Bildschirm oder in der Lobby).
+export function waehleGetraenk(zustand, spielerId, getraenk) {
+  const spieler = zustand.spieler.find((s) => s.id === spielerId);
+  if (spieler && istGetraenk(getraenk)) spieler.getraenk = getraenk;
+}
+
 // Ein Spieler tippt "Verstanden" auf dem Erklär-Bildschirm.
+// Erst geht das, wenn er sein Getränk gewählt hat.
 export function verstanden(zustand, spielerId) {
   if (zustand.phase !== 'erklaerung') return;
   const spieler = zustand.spieler.find((s) => s.id === spielerId);
-  if (spieler) spieler.verstanden = true;
+  if (!spieler?.getraenk) return;
+  spieler.verstanden = true;
   pruefeVerstanden(zustand);
 }
 
@@ -154,15 +166,22 @@ function pruefeFertig(zustand) {
   if (rundenTyp(runde.typ).fertig(runde, aktiveSpieler(zustand))) abschliessen(zustand);
 }
 
-// Runde auswerten und Schlucke zählen.
+// Runde auswerten: Punkte aus den Regeln → Schlucke im Getränk jedes Spielers.
 function abschliessen(zustand) {
   const runde = zustand.runde;
   const ergebnis = rundenTyp(runde.typ).auswerten(runde, zustand.spieler);
-  runde.ergebnis = ergebnis;
-  for (const [id, anzahl] of Object.entries(ergebnis.schlucke)) {
+  // Getrunken: { spielerId: { schlucke, getraenk } }, festgehalten, falls jemand später das Getränk wechselt
+  ergebnis.getrunken = {};
+  for (const [id, punkte] of Object.entries(ergebnis.punkte)) {
     const spieler = zustand.spieler.find((s) => s.id === id);
-    if (spieler) spieler.schlucke += anzahl;
+    if (!spieler || punkte <= 0) continue;
+    const getraenk = spieler.getraenk ?? 'bier';
+    const schlucke = umrechnen(punkte, getraenk);
+    spieler.punkte = (spieler.punkte ?? 0) + punkte;
+    spieler.schlucke = (spieler.schlucke ?? 0) + schlucke;
+    ergebnis.getrunken[id] = { schlucke, getraenk };
   }
+  runde.ergebnis = ergebnis;
   if (ergebnis.neueRegel) zustand.regel = ergebnis.neueRegel;
 }
 
@@ -201,7 +220,7 @@ export function baueSicht(zustand, spielerId) {
     gastgeberId: zustand.gastgeberId,
     istGastgeber: spielerId === zustand.gastgeberId,
     // farbe: Platz in der Liste → die ersten 6 Spieler haben garantiert verschiedene Farben
-    spieler: zustand.spieler.map(({ id, name, verbunden, schlucke, verstanden }, platz) => ({ id, name, verbunden, schlucke, verstanden, farbe: platz % 6 })),
+    spieler: zustand.spieler.map(({ id, name, verbunden, getraenk, punkte, schlucke, verstanden }, platz) => ({ id, name, verbunden, getraenk, punkte, schlucke, verstanden, farbe: platz % 6 })),
     auswahl: zustand.auswahl,
     verfuegbar: verfuegbareSpiele(zustand),
     rundeNr: zustand.rundeNr,

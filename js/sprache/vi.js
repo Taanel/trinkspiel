@@ -2,7 +2,7 @@
 // Hinweis: Vietnamesisch hat keine Mehrzahl-Formen, deshalb einfach "{n} ngụm".
 
 export default {
-  schlucke: ({ n }) => `${n} ngụm`,
+  schlucke: ({ n, g }) => ({ bier: `${n} ngụm bia`, mix: `${n} ngụm cocktail`, shot: `${n} ngụm shot` })[g] ?? `${n} ngụm`,
 
   allgemein: {
     du: 'bạn',
@@ -70,6 +70,15 @@ export default {
     verlassenFrage: 'Đóng phòng thật à? Trò chơi sẽ kết thúc cho tất cả.',
   },
 
+  getraenk: {
+    frage: 'Bạn uống gì?',
+    hinweis: 'Tất cả đều có cồn. Uống cocktail hay shot thì ít ngụm hơn vì nặng hơn.',
+    zuerstWaehlen: 'Chọn đồ uống trước',
+    bier: 'Bia',
+    mix: 'Cocktail',
+    shot: 'Shot',
+  },
+
   erklaerung: {
     verstanden: 'Hiểu rồi',
     warten: 'Sắp bắt đầu, mọi người vẫn đang đọc.',
@@ -94,7 +103,7 @@ export default {
 
   ende: {
     titel: 'Kết quả',
-    gesamt: ({ n }) => `Cả nhóm uống ${n} ngụm. Một hai ba dô!`,
+    gesamt: ({ n }) => `Đã chơi ${n} lượt. Một hai ba dô!`,
     platz: 'Hạng',
     schlucke: 'Số ngụm',
     nochmal: 'Chơi lại',
@@ -167,7 +176,7 @@ export default {
       schritte: [
         'Một thẻ bài hiện ra cho tất cả cùng lúc.',
         'Tôi chưa bao giờ …: ai đã từng làm thì uống.',
-        'Thử thách: người được gọi tên làm theo, hoặc uống 3.',
+        'Thử thách: người được gọi tên làm theo, hoặc uống (3 ngụm bia, 2 ngụm cocktail hoặc 1 ngụm shot).',
         'Luật: có hiệu lực đến khi có luật mới. Ai phạm luật thì uống.',
       ],
       arten: {
@@ -177,7 +186,7 @@ export default {
       },
       unterzeile: {
         nie: 'Ai đã từng làm thì uống.',
-        pflicht: 'Làm đi, không thì uống 3 ngụm.',
+        pflicht: 'Làm đi, không thì uống: 3 ngụm bia, 2 ngụm cocktail hoặc 1 ngụm shot.',
         regel: 'Có hiệu lực từ giờ đến luật tiếp theo. Ai phạm thì uống.',
       },
     },
