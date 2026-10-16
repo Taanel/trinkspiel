@@ -1,0 +1,72 @@
+// Kleine Helfer, damit wir HTML-Elemente bequem in JavaScript bauen können.
+
+// el('button', { class: 'knopf', onclick: () => ... }, 'Text')
+// - erster Wert: Name des HTML-Elements
+// - zweiter Wert: Eigenschaften (class, text, on..., data-..., andere Attribute)
+// - danach: Kinder (Texte oder andere Elemente). null/false werden übersprungen,
+//   so kann man schreiben: bedingung && el(...)
+export function el(tag, eigenschaften = {}, ...kinder) {
+  const element = document.createElement(tag);
+  for (const [name, wert] of Object.entries(eigenschaften)) {
+    if (wert === null || wert === undefined || wert === false) continue;
+    if (name === 'class') element.className = wert;
+    else if (name === 'text') element.textContent = wert;
+    else if (name === 'style' && typeof wert === 'object') {
+      // setProperty, damit auch CSS-Variablen wie '--i' funktionieren
+      for (const [eigenschaft, w] of Object.entries(wert)) element.style.setProperty(eigenschaft, w);
+    }
+    else if (name.startsWith('on')) element.addEventListener(name.slice(2), wert);
+    else if (name in element && typeof wert !== 'string') element[name] = wert;
+    else element.setAttribute(name, wert === true ? '' : wert);
+  }
+  for (const kind of kinder.flat(Infinity)) {
+    if (kind === null || kind === undefined || kind === false) continue;
+    element.append(kind instanceof Node ? kind : String(kind));
+  }
+  return element;
+}
+
+// Kleine gezeichnete Icons (SVG), alle mit derselben Strichstärke.
+const IKONEN = {
+  frage: 'M9 9a3 3 0 1 1 4.2 2.75c-.75.35-1.2 1.05-1.2 1.85V14.5M12 18h.01',
+  kreuz: 'M7 7l10 10M17 7L7 17',
+};
+export function ikon(name) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('class', 'ikon');
+  svg.setAttribute('aria-hidden', 'true');
+  const pfad = document.createElementNS(ns, 'path');
+  pfad.setAttribute('d', IKONEN[name]);
+  svg.append(pfad);
+  return svg;
+}
+
+// Handy kurz vibrieren lassen (geht nicht auf iPhones, schadet aber nicht).
+export function vibriere(muster = [80, 60, 80]) {
+  try {
+    navigator.vibrate?.(muster);
+  } catch {
+    // ignorieren
+  }
+}
+
+// Sicherer Zugriff auf localStorage: in privaten Fenstern kann er Fehler werfen.
+export function speicherLesen(schluessel) {
+  try {
+    const wert = localStorage.getItem(schluessel);
+    return wert ? JSON.parse(wert) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function speicherSchreiben(schluessel, wert) {
+  try {
+    if (wert === null) localStorage.removeItem(schluessel);
+    else localStorage.setItem(schluessel, JSON.stringify(wert));
+  } catch {
+    // ignorieren: dann wird eben nichts gespeichert
+  }
+}

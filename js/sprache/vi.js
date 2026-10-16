@@ -1,0 +1,185 @@
+// Tiếng Việt. Gleiche Schlüssel wie in de.js und en.js!
+// Hinweis: Vietnamesisch hat keine Mehrzahl-Formen, deshalb einfach "{n} ngụm".
+
+export default {
+  schlucke: ({ n }) => `${n} ngụm`,
+
+  allgemein: {
+    du: 'bạn',
+    oder: 'hay',
+    senden: 'Gửi',
+    sprache: 'Ngôn ngữ',
+    zurStartseite: 'Về trang đầu',
+    abbrechen: 'Huỷ',
+    schliessen: 'Đóng',
+  },
+
+  start: {
+    unterzeile: 'Trò chơi uống rượu, mỗi người bình chọn bí mật trên điện thoại của mình.',
+    deinName: 'Tên của bạn',
+    fehler: {
+      name: 'Nhập tên của bạn trước nhé.',
+      code: 'Mã phòng gồm 4 chữ cái, ví dụ KXPT.',
+    },
+    eingeladen: 'Bạn được mời vào phòng',
+    beitreten: 'Vào phòng',
+    andererRaum: 'Chọn phòng khác',
+    raumCode: 'Mã phòng',
+    fortsetzen: 'Chơi tiếp',
+    erstellen: 'Tạo phòng mới',
+    oderCode: 'Hoặc vào bằng mã phòng',
+    verantwortung: 'Uống có trách nhiệm. Một ngụm nước lọc cũng được.',
+  },
+
+  verbindung: {
+    verbinde: 'Đang kết nối …',
+    verbindeText: 'Chờ chút, các điện thoại đang tìm nhau.',
+    getrennt: 'Mất kết nối, đang nối lại …',
+    nichtGefunden: 'Không tìm thấy phòng',
+    nichtGefundenText: 'Mã đúng chưa? Nếu chủ phòng đang tải lại trang, sẽ tự kết nối lại ngay.',
+    voll: 'Phòng đã đầy',
+    vollText: 'Tối đa 12 người chơi.',
+    entfernt: 'Bạn đã bị mời ra',
+    entferntText: 'Chủ phòng đã xoá bạn khỏi phòng.',
+    fehler: 'Không có kết nối',
+    fehlerText: 'Không kết nối được dịch vụ trung gian. Kiểm tra mạng rồi thử lại.',
+    fragenFehlen: 'Không tải được câu hỏi. Vui lòng tải lại trang.',
+  },
+
+  lobby: {
+    raum: 'Phòng',
+    raumCode: 'Mã phòng {code}',
+    spieler: 'Người chơi',
+    gastgeber: 'chủ phòng',
+    offline: 'vắng',
+    entfernen: 'Xoá {name}',
+    dabei: ({ n }) => (n === 1 ? 'Mới có mình bạn. Rủ bạn bè vào đi!' : `${n} người đã vào`),
+    einladen: 'Mời bạn bè',
+    scannen: 'Quét bằng camera điện thoại',
+    oderCode: 'hoặc nhập mã:',
+    teilen: 'Chia sẻ link',
+    teilenText: 'Vào chơi đi! Trò uống rượu “Một hai ba dô”:',
+    kopiert: 'Đã sao chép link. Gửi vào nhóm nhé!',
+    spielWaehlen: 'Chơi trò gì đây?',
+    abSpielern: 'cần {n} người',
+    runden: 'Số lượt',
+    rundenText: '{n} lượt',
+    starten: 'Bắt đầu',
+    warteAufGastgeber: '{name} đang chọn trò và sẽ bắt đầu.',
+    verlassen: 'Rời phòng',
+    verlassenFrage: 'Đóng phòng thật à? Trò chơi sẽ kết thúc cho tất cả.',
+  },
+
+  erklaerung: {
+    verstanden: 'Hiểu rồi',
+    warten: 'Sắp bắt đầu, mọi người vẫn đang đọc.',
+  },
+
+  runde: {
+    nummer: 'Lượt {nr}/{gesamt}',
+    fertig: '{fertig}/{gesamt} người xong',
+    gewaehlt: 'Đã chọn. Chờ mọi người …',
+    stimmen: ({ n }) => `${n} phiếu`,
+    werTrinkt: 'Ai uống',
+    duTrinkst: 'Bạn uống',
+    niemandTrinkt: 'Không ai phải uống. Nhưng cứ dô cái đã!',
+    naechsteRunde: 'Bạn sẽ chơi từ lượt sau.',
+    nichtWarten: 'Không chờ nữa',
+    weiter: 'Lượt tiếp',
+    zumErgebnis: 'Xem kết quả',
+    warteAufGastgeber: '{name} sẽ bắt đầu lượt tiếp ngay.',
+    hilfe: 'Xem luật chơi',
+    regel: 'Luật:',
+  },
+
+  ende: {
+    titel: 'Kết quả',
+    gesamt: ({ n }) => `Cả nhóm uống ${n} ngụm. Một hai ba dô!`,
+    platz: 'Hạng',
+    schlucke: 'Số ngụm',
+    nochmal: 'Chơi lại',
+    menue: 'Trò khác',
+  },
+
+  spiele: {
+    mix: {
+      name: 'Trộn tất cả',
+      kurz: 'Mọi trò trộn lẫn, xen giữa là thẻ bài',
+    },
+    'wer-wuerde-eher': {
+      name: 'Ai dễ … nhất',
+      kurz: 'Bình chọn bí mật xem ai dễ … nhất',
+      schritte: [
+        'Một câu hỏi hiện ra, ví dụ “Ai dễ đi tắm truồng nhất?”',
+        'Bạn bí mật chọn một người. Không ai biết bạn chọn ai.',
+        'Ai nhiều phiếu nhất thì uống, mỗi phiếu một ngụm.',
+      ],
+      auftrag: 'Chạm vào người hợp nhất.',
+    },
+    mehrheit: {
+      name: 'Số đông thắng',
+      kurz: 'Chọn một trong hai. Phe ít người uống',
+      schritte: [
+        'Một câu hỏi chọn một trong hai hiện ra, ví dụ “Biển hay núi?”',
+        'Bạn bí mật chọn một phe.',
+        'Phe ít người hơn uống 2 ngụm. Nếu hoà, mọi người uống 1.',
+      ],
+      ausgang: {
+        minderheit: 'Phe ít người uống.',
+        gleichstand: 'Hoà! Mọi người uống một ngụm.',
+        einig: 'Cả nhóm cùng ý. Không ai phải uống.',
+      },
+    },
+    luegner: {
+      name: 'Kẻ nói dối',
+      kurz: 'Một người bí mật nhận câu hỏi khác',
+      schritte: [
+        'Mọi người nhận cùng một câu hỏi, riêng một người nhận câu hơi khác. Chính người đó cũng không biết!',
+        'Mỗi người gõ một câu trả lời ngắn.',
+        'Sau đó cả nhóm thấy câu hỏi thật và mọi câu trả lời. Bàn luận rồi bình chọn: ai có câu hỏi khác?',
+        'Bắt được kẻ nói dối: người đó uống 3. Không bắt được: những người còn lại uống 2.',
+      ],
+      auftragAntworten: 'Trả lời ngắn, vài chữ hoặc một con số.',
+      platzhalter: 'Câu trả lời của bạn',
+      geantwortet: 'Đã gửi. Chờ mọi người …',
+      echteFrageWar: 'Câu hỏi thật là:',
+      auftragAbstimmen: 'Bàn đi! Rồi chạm vào câu trả lời không khớp.',
+      luegnerWar: 'Người có câu hỏi khác là',
+      seineFrage: 'câu hỏi đó là:',
+      erwischt: 'Bị bắt rồi! {name} uống.',
+      entkommen: '{name} thoát rồi. Những người còn lại uống.',
+    },
+    schaetzfrage: {
+      name: 'Đoán số',
+      kurz: 'Đoán một con số. Sai xa nhất uống',
+      schritte: [
+        'Một câu hỏi có đáp án là con số hiện ra.',
+        'Bạn bí mật nhập số mình đoán.',
+        'Ai sai xa nhất uống 3. Ai gần nhất được chỉ định 2 ngụm cho người khác.',
+      ],
+      platzhalter: 'Số bạn đoán',
+      richtig: 'Đáp án đúng là',
+      verteilen: '{name} đoán gần nhất, được chỉ định 2 ngụm cho người khác.',
+    },
+    karte: {
+      name: 'Thẻ bài',
+      kurz: 'Tôi chưa bao giờ, thử thách và luật',
+      schritte: [
+        'Một thẻ bài hiện ra cho tất cả cùng lúc.',
+        'Tôi chưa bao giờ …: ai đã từng làm thì uống.',
+        'Thử thách: người được gọi tên làm theo, hoặc uống 3.',
+        'Luật: có hiệu lực đến khi có luật mới. Ai phạm luật thì uống.',
+      ],
+      arten: {
+        nie: 'Tôi chưa bao giờ',
+        pflicht: 'Thử thách',
+        regel: 'Luật mới',
+      },
+      unterzeile: {
+        nie: 'Ai đã từng làm thì uống.',
+        pflicht: 'Làm đi, không thì uống 3 ngụm.',
+        regel: 'Có hiệu lực từ giờ đến luật tiếp theo. Ai phạm thì uống.',
+      },
+    },
+  },
+};

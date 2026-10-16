@@ -1,0 +1,1595 @@
+/* ==========================================================================
+   Một hai ba dô! – Design "Vé số" (vietnamesisches Straßen-Lotterielos)
+
+   Idee: Nachtgrund, und darauf leuchten bunte Lose aus bedrucktem Papier.
+   Jede Runde ist ein Los, die Auflösung ist die Ziehung.
+   Regeln (siehe DESIGN.md):
+   - Pro Bildschirm besitzt genau ein Los das Feld, der Rest ist ruhige Nacht.
+   - Rot (--rot) bedeutet nur "DU trinkst". Für nichts anderes verwenden.
+   - Auswahl = Kugelschreiber-Kreis, fertig = Stanzloch.
+
+   Aufbau dieser Datei:
+   1. Farben, Schriften, Abstände (Variablen)
+   2. Grundlagen
+   3. Kopfzeile und Leisten
+   4. Knöpfe und Eingabefelder
+   5. Lose (die farbigen Karten)
+   6. Startseite, Lobby, Erklärung, Ende
+   7. Runden
+   8. Animationen
+   ========================================================================== */
+
+/* ---------- 1. Variablen ---------- */
+:root {
+  /* Nacht (Hintergrund) in drei Stufen: Flächen heben sich durch Helligkeit ab, nicht durch Linien */
+  --nacht: #14182e;
+  --nacht-2: #1e2342;
+  --nacht-3: #2a3058;
+
+  /* Schrift auf Nacht */
+  --papier: #f3eedc;
+  --papier-2: #cfc9e3; /* Nebentext, leicht violett getönt statt grau */
+
+  /* Lospapier-Farben */
+  --zitrone: #f6e27a;
+  --rosa: #f4a7be;
+  --minze: #9fe3c9;
+  --flieder: #b9b4f5;
+  --aprikose: #f7b267;
+  --koralle: #f59e9e; /* nur für Fehlermeldungen */
+
+  /* Druckfarben auf dem Los */
+  --tinte: #1b1f3a;
+  --tinte-2: #3b3f63;
+  --druckblau: #2440a8;
+  --rot: #d7263d; /* NUR für "du trinkst" */
+
+  --schrift-anzeige: 'Bricolage Grotesque', 'Be Vietnam Pro', system-ui, sans-serif;
+  --schrift-text: 'Be Vietnam Pro', system-ui, sans-serif;
+
+  --rand: 16px; /* Seitenrand links/rechts */
+  --breite: 520px; /* maximale Breite auf großen Bildschirmen */
+  --radius-los: 6px;
+  --radius-flaeche: 12px;
+
+  --leiste-hoehe: 96px; /* Platz für die festgeheftete Knopf-Leiste unten */
+
+  /* Feine Wellenlinien (Guilloche) wie auf echten Losen, nur auf dem aktiven Los */
+  --guilloche: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='18'%3E%3Cg fill='none' stroke='%231b1f3a' stroke-opacity='.11' stroke-width='1'%3E%3Cpath d='M0 9C9 1 27 1 36 9S63 17 72 9'/%3E%3Cpath d='M0 9C9 17 27 17 36 9S63 1 72 9'/%3E%3C/g%3E%3C/svg%3E");
+
+  --ease-raus: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: dark;
+}
+
+/* ---------- 2. Grundlagen ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--nacht-3) var(--nacht);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--nacht);
+  color: var(--papier);
+  font-family: var(--schrift-text);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  caret-color: var(--zitrone);
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--zitrone);
+  color: var(--tinte);
+}
+
+h1, h2, h3, p, ol, ul {
+  margin: 0;
+}
+
+ul, ol {
+  padding: 0;
+  list-style: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 3px solid var(--zitrone);
+  outline-offset: 3px;
+}
+
+/* Zahlen in Listen und Tabellen gleich breit, damit sie untereinander stehen */
+[data-roll],
+.serie,
+.tafel-zahl,
+.schaetz-wert,
+.loesung-zahl {
+  font-variant-numeric: tabular-nums;
+}
+
+.bildschirm {
+  max-width: var(--breite);
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: 0 var(--rand) calc(var(--leiste-hoehe) + env(safe-area-inset-bottom) + 24px);
+}
+
+.phase-start,
+.phase-meldung {
+  padding-bottom: 40px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------- 3. Kopfzeile und Leisten ---------- */
+.kopf {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 12px;
+  min-height: 64px;
+  padding-top: env(safe-area-inset-top);
+  margin: 0 calc(var(--rand) * -1) 8px;
+  padding-inline: var(--rand);
+  background: var(--nacht);
+}
+
+.serie {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  color: var(--zitrone);
+  white-space: nowrap;
+}
+
+.serie-nr {
+  font-weight: 500;
+  margin-right: 0.3em;
+  opacity: 0.75;
+}
+
+/* In Runden: zweite Zeile mit Spielname und Rundenzähler */
+.kopf-runde {
+  order: 3;
+  flex-basis: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0 10px;
+  line-height: 1.2;
+}
+
+.kopf-spiel {
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.kopf-zaehler {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  color: var(--papier-2);
+}
+
+.kopf-rechts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sprach-wahl {
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--nacht-2);
+}
+
+.sprach-knopf {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--papier-2);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sprach-knopf[aria-pressed='true'] {
+  background: var(--papier);
+  color: var(--tinte);
+}
+
+.ikon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hilfe-knopf {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--nacht-2);
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.verbindungs-band {
+  margin: 0 calc(var(--rand) * -1) 12px;
+  padding: 10px var(--rand);
+  background: var(--aprikose);
+  color: var(--tinte);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.regel-band {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+  font-size: 0.95rem;
+}
+
+.regel-band strong {
+  color: var(--minze);
+}
+
+/* Knopf-Leiste unten, im Daumenbereich */
+.aktions-leiste {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: var(--breite);
+  margin: 0 auto;
+  padding: 12px var(--rand) calc(14px + env(safe-area-inset-bottom));
+  background: var(--nacht);
+}
+
+.warte-text {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  color: var(--papier-2);
+}
+
+/* ---------- 4. Knöpfe und Eingabefelder ---------- */
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  transition: transform 0.15s var(--ease-raus), background-color 0.2s;
+}
+
+.knopf:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.knopf.haupt {
+  background: var(--zitrone);
+  color: var(--tinte);
+}
+
+.knopf.zweit {
+  background: var(--nacht-3);
+  color: var(--papier);
+}
+
+.knopf.zweit.dunkel {
+  background: var(--tinte);
+  color: var(--papier);
+  min-height: 48px;
+  font-size: 1.05rem;
+}
+
+.knopf:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .knopf.haupt:hover:not(:disabled) { background: #fbeb9a; }
+  .knopf.zweit:hover:not(:disabled) { background: #353c6c; }
+}
+
+.text-knopf {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--papier-2);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.feld {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.feld-name {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--papier-2);
+}
+
+.eingabe {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 16px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+  font-size: 1.2rem; /* mindestens 16px, sonst zoomt das iPhone hinein */
+  transition: border-color 0.2s;
+}
+
+.eingabe:focus {
+  outline: none;
+  border-color: var(--zitrone);
+}
+
+.eingabe::placeholder {
+  color: #9a95b5;
+}
+
+.eingabe.code {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.feld-fehler {
+  color: var(--koralle);
+  font-weight: 500;
+}
+
+.eingabe-zeile {
+  display: flex;
+  gap: 8px;
+}
+
+.eingabe-zeile .eingabe {
+  flex: 1;
+  min-width: 0;
+}
+
+.eingabe-zeile .knopf {
+  width: auto;
+  flex-shrink: 0;
+}
+
+.zahl-feld {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.zahl-feld .eingabe {
+  padding-right: 4.5em;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+}
+
+.zahl-feld .einheit {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--papier-2);
+  pointer-events: none;
+}
+
+/* ---------- 5. Lose ---------- */
+/* Ein "Los": Papier in einer Farbe, links eine gestrichelte Abreißkante,
+   links und rechts halbrunde Kerben (über eine Maske ausgeschnitten). */
+.los,
+.frage,
+.spielkarte,
+.loesung,
+.enthuellung,
+.einladung-los,
+.tafel-zeile.sieger {
+  --los: var(--zitrone);
+  position: relative;
+  padding: 16px 18px 16px 30px;
+  border: 0;
+  border-radius: var(--radius-los);
+  background-color: var(--los);
+  color: var(--tinte);
+  text-align: left;
+  /* Maske (kein sichtbarer Verlauf): schneidet die halbrunden Kerben aus. taste-skill-ignore */
+  -webkit-mask: radial-gradient(circle 9px at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat, /* taste-skill-ignore */
+    radial-gradient(circle 9px at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat; /* taste-skill-ignore */
+  mask: radial-gradient(circle 9px at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat, /* taste-skill-ignore */
+    radial-gradient(circle 9px at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat; /* taste-skill-ignore */
+}
+
+/* Abreißkante */
+.los::before,
+.frage::before,
+.spielkarte::before,
+.loesung::before,
+.enthuellung::before,
+.einladung-los::before,
+.tafel-zeile.sieger::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  bottom: 10px;
+  border-left: 2px dotted rgb(27 31 58 / 0.35);
+}
+
+/* Farben der Lose (eine pro Spiel) */
+.farbe-zitrone { --los: var(--zitrone); }
+.farbe-rosa { --los: var(--rosa); }
+.farbe-minze { --los: var(--minze); }
+.farbe-flieder { --los: var(--flieder); }
+.farbe-aprikose { --los: var(--aprikose); }
+.farbe-papier { --los: var(--papier); }
+
+/* In einer Runde übernimmt die Frage die Farbe des Spiels */
+.runden-flaeche.farbe-rosa .frage { --los: var(--rosa); }
+.runden-flaeche.farbe-minze .frage { --los: var(--minze); }
+.runden-flaeche.farbe-flieder .frage,
+.runden-flaeche.farbe-flieder .enthuellung { --los: var(--flieder); }
+.runden-flaeche.farbe-aprikose .frage,
+.runden-flaeche.farbe-aprikose .loesung { --los: var(--aprikose); }
+
+/* Nur das aktive Los trägt die feinen Wellenlinien */
+.los.gewaehlt,
+.erklaer-los,
+.frage,
+.spielkarte,
+.enthuellung,
+.loesung,
+.tafel-zeile.sieger {
+  background-image: var(--guilloche);
+}
+
+.los-titel {
+  display: block;
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 80%;
+  font-size: 1.45rem;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.los-text {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: var(--tinte-2);
+}
+
+.lose {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.lose .los {
+  min-height: 108px;
+  padding-top: 32px; /* Platz für die Seriennummer oben */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: transform 0.2s var(--ease-raus);
+}
+
+/* Seriennummer in der Ecke, wie auf einem echten Los */
+.los-serie {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--druckblau);
+  font-variant-numeric: tabular-nums;
+}
+
+.lose .los.gross,
+.lose .los.farbe-papier {
+  grid-column: span 2;
+  min-height: 0;
+}
+
+.lose .los.gross {
+  padding-bottom: 22px;
+}
+
+/* Im Menü: Kreis nur um den Spielnamen */
+.lose .los-titel {
+  position: relative;
+  align-self: flex-start;
+}
+
+.lose .los-titel .stift-kreis {
+  inset: -9px -14px;
+  width: calc(100% + 28px);
+  height: calc(100% + 18px);
+}
+
+.lose .los.gross .los-titel {
+  font-size: 2.3rem;
+}
+
+.lose button.los:active:not(:disabled) {
+  transform: scale(0.98) rotate(-0.5deg);
+}
+
+.lose .los:disabled,
+.lose .los.gesperrt {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Kugelschreiber-Kreis um die Auswahl */
+.stift-kreis {
+  position: absolute;
+  inset: 4px 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 8px);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.stift-kreis path {
+  fill: none;
+  stroke: var(--zitrone);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Der Kreis wird von links nach rechts "hingekritzelt" (Wisch-Effekt).
+   Hinweis: stroke-dasharray funktioniert in Chrome nicht zusammen mit non-scaling-stroke. */
+.stift-kreis {
+  animation: kreis-ziehen 0.45s var(--ease-raus) both;
+}
+
+.los .stift-kreis path,
+.seite.gewaehlt .stift-kreis path {
+  stroke: var(--druckblau);
+}
+
+/* ---------- Avatare ---------- */
+.avatar {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--zitrone);
+  color: var(--tinte);
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.avatar.klein { width: 32px; height: 32px; font-size: 0.9rem; }
+.avatar.gross { width: 56px; height: 56px; font-size: 1.5rem; }
+
+.farbe-0 { background: var(--zitrone); }
+.farbe-1 { background: var(--rosa); }
+.farbe-2 { background: var(--minze); }
+.farbe-3 { background: var(--flieder); }
+.farbe-4 { background: var(--aprikose); }
+.farbe-5 { background: var(--papier); }
+
+/* Stanzloch = fertig: ein Loch IM Avatar, durch das man die Nacht sieht */
+.avatar.gelocht::after {
+  content: '';
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  width: 24%;
+  height: 24%;
+  border-radius: 50%;
+  background: var(--nacht);
+  animation: stanzen 0.25s var(--ease-raus) both;
+}
+
+/* ---------- 6. Startseite ---------- */
+.start {
+  padding-top: 12px;
+  gap: 16px;
+}
+
+.titel {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: clamp(3.6rem, 21vw, 6rem);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  color: var(--zitrone);
+}
+
+.titel.klein {
+  font-size: clamp(2.2rem, 11vw, 3rem);
+}
+
+.unterzeile {
+  color: var(--papier-2);
+  max-width: 34ch;
+}
+
+.start .titel + .unterzeile {
+  margin-bottom: 12px;
+}
+
+.code-zeile {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.code-zeile .knopf {
+  width: auto;
+}
+
+.einladung-text {
+  font-size: 1.1rem;
+}
+
+.serie-inline {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.einladung-text .serie-inline {
+  color: var(--zitrone);
+}
+
+.los-knopf.fortsetzen {
+  --los: var(--zitrone);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 64px;
+  background-image: var(--guilloche);
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.los-knopf.fortsetzen .los-titel {
+  font-size: 1.2rem;
+}
+
+.verantwortung {
+  margin-top: 24px;
+  font-size: 0.92rem;
+  color: var(--papier-2);
+}
+
+/* Warte- und Fehlerbildschirm */
+.meldung {
+  min-height: 60dvh;
+  justify-content: center;
+  gap: 16px;
+}
+
+.meldung-titel {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.meldung .knopf {
+  margin-top: 12px;
+}
+
+/* Ein Los, das leicht hin und her schwingt, während wir warten */
+.warte-los {
+  width: 96px;
+  height: 56px;
+  border-radius: var(--radius-los);
+  background: var(--zitrone) var(--guilloche);
+  transform-origin: 50% 0;
+  animation: schwingen 1.6s ease-in-out infinite alternate;
+}
+
+/* ---------- Lobby ---------- */
+.lobby {
+  gap: 12px;
+}
+
+.spieler-liste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.spieler-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 4px 6px 4px 4px;
+  border-radius: 999px;
+  background: var(--nacht-2);
+}
+
+.spieler-chip > span:not(.avatar):first-of-type {
+  padding-right: 6px;
+}
+
+.spieler-chip .avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+}
+
+.spieler-chip.offline {
+  opacity: 0.5;
+}
+
+.chip-zusatz {
+  font-size: 0.85rem;
+  color: var(--papier-2);
+  padding-right: 6px;
+}
+
+.chip-weg {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--nacht-3);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.einladung {
+  margin-top: 4px;
+}
+
+.einladung-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 4px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 1.15rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.einladung-kopf::-webkit-details-marker {
+  display: none;
+}
+
+.einladung-kopf::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-right: 2.5px solid currentColor;
+  border-bottom: 2.5px solid currentColor;
+  transform: rotate(45deg) translateY(-3px);
+  transition: transform 0.25s var(--ease-raus);
+}
+
+.einladung[open] .einladung-kopf::after {
+  transform: rotate(-135deg) translateY(-3px);
+}
+
+.einladung-los {
+  --los: var(--papier);
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.qr {
+  width: 128px;
+  height: 128px;
+  display: block;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.qr path {
+  fill: var(--tinte);
+}
+
+.einladung-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.einladung-code strong {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+  color: var(--druckblau);
+}
+
+.abschnitt {
+  margin-top: 16px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+
+.runden-wahl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.runden-wahl-name {
+  color: var(--papier-2);
+}
+
+.segment {
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--nacht-2);
+}
+
+.segment-knopf {
+  min-width: 56px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--papier-2);
+}
+
+.segment-knopf[aria-pressed='true'] {
+  background: var(--papier);
+  color: var(--tinte);
+}
+
+.segment-knopf:disabled {
+  cursor: default;
+}
+
+/* ---------- Erklärung ---------- */
+.erklaer-los {
+  padding: 24px 20px 24px 34px;
+}
+
+.erklaer-los .los-titel {
+  font-size: 2.3rem;
+}
+
+.erklaer-los .los-text {
+  font-size: 1.05rem;
+}
+
+.schritte {
+  counter-reset: schritt;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.schritte li {
+  counter-increment: schritt;
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 8px;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.schritte li::before {
+  content: counter(schritt);
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--druckblau);
+}
+
+.hilfe-blatt {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: var(--breite);
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 20px) var(--rand) calc(env(safe-area-inset-bottom) + 20px);
+  overflow-y: auto;
+  background: var(--nacht);
+  animation: hochziehen 0.35s var(--ease-raus) both;
+}
+
+/* ---------- Ende: Ergebnistafel (wie eine Xổ-số-Ergebnistafel) ---------- */
+.tafel-kopf {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding: 0 16px 0 12px;
+  font-size: 0.9rem;
+  color: var(--papier-2);
+}
+
+.tafel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Feste Spalten: Platz | Avatar | Name | Zahl */
+.tafel-zeile {
+  display: grid;
+  grid-template-columns: 2.4rem auto 1fr 4.5rem;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 8px 16px 8px 12px;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+}
+
+.tafel-platz {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--papier-2);
+}
+
+.tafel-name {
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+
+.tafel-zeile.ich .tafel-name {
+  font-weight: 700;
+}
+
+.tafel-zahl {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 2.2rem;
+  line-height: 1;
+  text-align: right;
+}
+
+/* Platz 1 ist das Gewinner-Los */
+.tafel-zeile.sieger {
+  min-height: 96px;
+  padding: 14px 20px 14px 30px;
+}
+
+.tafel-zeile.sieger .tafel-platz {
+  font-size: 2.8rem;
+  color: var(--druckblau);
+}
+
+.tafel-zeile.sieger .tafel-name {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1.05;
+}
+
+.tafel-zeile.sieger .tafel-zahl {
+  font-size: 3rem;
+}
+
+/* Avatar auf dem gelben Los: dunkel, damit er nicht im Gelb verschwindet */
+.tafel-zeile.sieger .avatar {
+  background: var(--tinte);
+  color: var(--zitrone);
+}
+
+/* ---------- 7. Runden ---------- */
+.runde {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Sobald die Auflösung (Lügner/Schätzfrage) ein eigenes Los zeigt, tritt die Frage zurück:
+   nur noch ein Los besitzt den Bildschirm. */
+.runde:has(.enthuellung, .loesung) .frage {
+  padding: 4px 0 0;
+  background: none;
+  color: var(--papier);
+  font-size: 1.2rem;
+  -webkit-mask: none;
+  mask: none;
+}
+
+.runde:has(.enthuellung, .loesung) .frage::before {
+  display: none;
+}
+
+/* Bei "Mehrheit gewinnt" ist das geteilte A/B-Los das Los der Runde, die Frage steht groß darüber */
+.runde:has(.seiten) .frage {
+  padding: 4px 0 0;
+  background: none;
+  color: var(--papier);
+  -webkit-mask: none;
+  mask: none;
+}
+
+.runde:has(.seiten) .frage::before {
+  display: none;
+}
+
+/* Die Frage ist das Los dieser Runde */
+.frage {
+  padding: 24px 20px 24px 34px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: clamp(1.55rem, 6.6vw, 2.1rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.anleitung,
+.klein-titel,
+.hinweis-gewaehlt,
+.niemand-trinkt {
+  color: var(--papier-2);
+}
+
+.hinweis-gewaehlt {
+  font-weight: 500;
+  color: var(--papier);
+}
+
+.fortschritt {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--papier-2);
+}
+
+.fortschritt-avatare {
+  display: flex;
+  gap: 6px;
+}
+
+/* Spieler zum Antippen */
+.spieler-raster {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.spieler-knopf {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+  text-align: left;
+  font-weight: 500;
+  transition: background-color 0.2s, transform 0.15s var(--ease-raus);
+}
+
+.spieler-knopf:active {
+  transform: scale(0.97);
+}
+
+.spieler-knopf.gewaehlt {
+  background: var(--nacht-3);
+}
+
+.spieler-knopf-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+}
+
+/* Wer würde eher: Ergebnis */
+.stimmen-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stimmen-zeile {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 6px 14px 6px 8px;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Balken im Hintergrund: Anteil der Stimmen */
+.stimmen-zeile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--nacht-3);
+  transform-origin: left;
+  transform: scaleX(var(--anteil));
+}
+
+.stimmen-anzahl {
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+}
+
+/* Mehrheit gewinnt: EIN Los, in der Mitte an der Abreißkante geteilt */
+.seiten {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 190px;
+  border-radius: var(--radius-los);
+  background: var(--minze);
+  color: var(--tinte);
+  -webkit-mask: radial-gradient(circle 9px at 50% 0, #0000 97%, #000) top / 100% 51% no-repeat, /* taste-skill-ignore */
+    radial-gradient(circle 9px at 50% 100%, #0000 97%, #000) bottom / 100% 51% no-repeat; /* taste-skill-ignore */
+  mask: radial-gradient(circle 9px at 50% 0, #0000 97%, #000) top / 100% 51% no-repeat, /* taste-skill-ignore */
+    radial-gradient(circle 9px at 50% 100%, #0000 97%, #000) bottom / 100% 51% no-repeat; /* taste-skill-ignore */
+}
+
+/* Abreißkante in der Mitte */
+.seiten::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  bottom: 14px;
+  border-left: 2px dotted rgb(27 31 58 / 0.4);
+}
+
+.oder {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--minze);
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--tinte-2);
+  pointer-events: none;
+}
+
+.seite {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: center;
+  transition: transform 0.15s var(--ease-raus);
+}
+
+button.seite:active {
+  transform: scale(0.96);
+}
+
+.seite-text {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 85%;
+  font-size: clamp(1.4rem, 6.4vw, 1.9rem);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+/* Gewählte Hälfte bekommt die Wellenlinien und den Kuli-Kreis */
+.seite.gewaehlt {
+  background-image: var(--guilloche);
+}
+
+.seite .stift-kreis {
+  inset: 12px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+}
+
+.seite-zahl {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.seite-avatare {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Eingabe (Lügner, Schätzfrage) */
+.meine-antwort {
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--zitrone);
+}
+
+/* Lügner */
+.antwort-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.antwort {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'avatar name stimmen' 'avatar text stimmen';
+  align-items: center;
+  column-gap: 12px;
+  min-height: 64px;
+  padding: 10px 14px 10px 10px;
+  border: 0;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+  text-align: left;
+}
+
+.antwort .avatar { grid-area: avatar; }
+.antwort-name { grid-area: name; font-size: 0.88rem; color: var(--papier-2); }
+.antwort-text { grid-area: text; font-family: var(--schrift-anzeige); font-weight: 700; font-size: 1.25rem; line-height: 1.15; overflow-wrap: anywhere; }
+.antwort-stimmen { grid-area: stimmen; font-family: var(--schrift-anzeige); font-weight: 700; }
+
+.antwort.gewaehlt { background: var(--nacht-3); }
+
+.antwort.entlarvt {
+  background: var(--flieder);
+  color: var(--tinte);
+}
+
+.antwort.entlarvt .antwort-name { color: var(--tinte-2); }
+
+.enthuellung {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 20px 20px 34px;
+}
+
+.enthuellung .klein-titel { color: var(--tinte-2); }
+
+.enthuellung-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0 10px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.luegen-frage {
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+
+/* Schätzfrage */
+.loesung {
+  padding: 18px 20px 18px 34px;
+}
+
+.loesung .klein-titel { color: var(--tinte-2); }
+
+.loesung-zahl {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 13vw, 3.6rem);
+  line-height: 1;
+}
+
+.loesung-zahl .einheit {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.schaetz-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.schaetz-zeile {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 6px 14px 6px 8px;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+}
+
+.schaetz-wert {
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+}
+
+.schaetz-zeile.beste .schaetz-wert { color: var(--minze); }
+
+/* Ergebnis: wer trinkt */
+.ergebnis-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.trink-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trink-zeile {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 8px 16px 8px 10px;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-3);
+}
+
+.trink-name {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.trink-anzahl {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.35rem;
+}
+
+/* DU trinkst: die einzige rote Fläche im ganzen Spiel */
+.trink-zeile.ich {
+  background: var(--rot);
+  color: #fff;
+}
+
+.trink-zeile.ich .trink-name {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+/* Karten */
+.karte-runde { --los: var(--papier); }
+.karte-nie { --los: var(--rosa); }
+.karte-pflicht { --los: var(--aprikose); }
+.karte-regel { --los: var(--minze); }
+
+.spielkarte {
+  --los: inherit;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  padding: 28px 22px 28px 36px;
+}
+
+.karte-runde .spielkarte { background-color: var(--los); }
+
+.spielkarte-text {
+  font-family: var(--schrift-anzeige);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 7vw, 2.2rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.karte-person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.karte-person.ich {
+  color: var(--zitrone);
+}
+
+/* ---------- 8. Animationen ---------- */
+
+/* Die Frage wird wie ein Los vom Stapel gezogen */
+.eintritt .frage,
+.eintritt .spielkarte,
+.eintritt .erklaer-los {
+  animation: los-ziehen 0.6s var(--ease-raus) both;
+}
+
+/* Zahlen der Ziehung */
+[data-roll].rollt {
+  color: var(--zitrone);
+}
+
+.trink-zeile.ich [data-roll].rollt,
+.los [data-roll].rollt,
+.tafel-zeile.sieger [data-roll].rollt {
+  color: inherit;
+  opacity: 0.7;
+}
+
+[data-roll].steht {
+  display: inline-block;
+  animation: einrasten 0.35s var(--ease-raus);
+}
+
+/* Schon vorhandene Elemente beim Neuzeichnen nicht noch einmal animieren */
+.schon-da,
+.schon-da path,
+.schon-da::after {
+  animation: none !important;
+}
+
+@keyframes los-ziehen {
+  from { opacity: 0; transform: translateY(48px) rotate(-3deg); }
+  60% { opacity: 1; }
+}
+
+@keyframes kreis-ziehen {
+  from { clip-path: inset(-12px 100% -12px -12px); }
+  to { clip-path: inset(-12px -12px -12px -12px); }
+}
+
+@keyframes stanzen {
+  from { opacity: 0; transform: scale(0.4); }
+}
+
+@keyframes einrasten {
+  from { transform: scale(1.25); }
+}
+
+@keyframes schwingen {
+  from { transform: rotate(-6deg); }
+  to { transform: rotate(6deg); }
+}
+
+@keyframes hochziehen {
+  from { opacity: 0; transform: translateY(40px); }
+}
+
+/* Wer "Bewegung reduzieren" eingestellt hat, bekommt alles sofort und ohne Bewegung */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Breitere Bildschirme (Tablet/Laptop): etwas mehr Luft */
+@media (min-width: 600px) {
+  :root {
+    --rand: 24px;
+  }
+
+  .bildschirm {
+    padding-top: 16px;
+  }
+}

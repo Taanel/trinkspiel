@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14182E">
+  <meta name="description" content="Trinkspiel für Freunde: Jeder spielt mit dem eigenen Handy, auf Deutsch, Englisch oder Vietnamesisch.">
+  <title>Một hai ba dô!</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Schriften: beide können vietnamesische Zeichen (ạ, ồ, ữ …) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- PeerJS: verbindet die Handys direkt miteinander (feste Version) -->
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <!-- qrcode-generator: erzeugt den QR-Code für die Einladung (feste Version) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+</head>
+<body>
+  <!-- Hier zeichnet js/main.js alle Bildschirme hinein -->
+  <div id="app"></div>
+  <noscript>Dieses Spiel braucht JavaScript. / This game needs JavaScript.</noscript>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

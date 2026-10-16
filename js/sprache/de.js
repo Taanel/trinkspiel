@@ -1,0 +1,185 @@
+// Deutsche Texte. Gleiche Schlüssel wie in en.js und vi.js!
+// {name}, {n} usw. werden beim Anzeigen ersetzt (siehe sprache/index.js).
+
+export default {
+  schlucke: ({ n }) => (n === 1 ? '1 Schluck' : `${n} Schlucke`),
+
+  allgemein: {
+    du: 'du',
+    oder: 'oder',
+    senden: 'Senden',
+    sprache: 'Sprache',
+    zurStartseite: 'Zur Startseite',
+    abbrechen: 'Abbrechen',
+    schliessen: 'Schließen',
+  },
+
+  start: {
+    unterzeile: 'Das Trinkspiel, bei dem jeder mit dem eigenen Handy geheim abstimmt.',
+    deinName: 'Dein Name',
+    fehler: {
+      name: 'Bitte gib zuerst deinen Namen ein.',
+      code: 'Der Raum-Code hat 4 Buchstaben, z. B. KXPT.',
+    },
+    eingeladen: 'Du bist eingeladen in Raum',
+    beitreten: 'Beitreten',
+    andererRaum: 'Anderen Raum wählen',
+    raumCode: 'Raum-Code',
+    fortsetzen: 'Spiel fortsetzen',
+    erstellen: 'Neuen Raum erstellen',
+    oderCode: 'Oder mit Raum-Code beitreten',
+    verantwortung: 'Trinkt verantwortungsvoll. Ein Schluck darf auch Wasser sein.',
+  },
+
+  verbindung: {
+    verbinde: 'Verbinde …',
+    verbindeText: 'Einen Moment, die Handys finden sich gerade.',
+    getrennt: 'Verbindung weg, verbinde neu …',
+    nichtGefunden: 'Raum nicht gefunden',
+    nichtGefundenText: 'Stimmt der Code? Wenn der Gastgeber die Seite gerade neu lädt, verbinden wir gleich automatisch.',
+    voll: 'Der Raum ist voll',
+    vollText: 'Es können höchstens 12 Leute mitspielen.',
+    entfernt: 'Du wurdest entfernt',
+    entferntText: 'Der Gastgeber hat dich aus dem Raum genommen.',
+    fehler: 'Keine Verbindung',
+    fehlerText: 'Der Vermittlungs-Dienst ist nicht erreichbar. Prüfe dein Internet und versuche es nochmal.',
+    fragenFehlen: 'Die Fragen konnten nicht geladen werden. Bitte Seite neu laden.',
+  },
+
+  lobby: {
+    raum: 'Raum',
+    raumCode: 'Raum-Code {code}',
+    spieler: 'Spieler',
+    gastgeber: 'Gastgeber',
+    offline: 'weg',
+    entfernen: '{name} entfernen',
+    dabei: ({ n }) => (n === 1 ? 'Nur du bisher. Lade deine Freunde ein!' : `${n} Leute dabei`),
+    einladen: 'Freunde einladen',
+    scannen: 'Mit der Handy-Kamera scannen',
+    oderCode: 'oder Code eingeben:',
+    teilen: 'Link teilen',
+    teilenText: 'Spiel mit! Trinkspiel „Một hai ba dô“:',
+    kopiert: 'Link kopiert. Schick ihn in die Gruppe!',
+    spielWaehlen: 'Was spielen wir?',
+    abSpielern: 'ab {n} Spielern',
+    runden: 'Runden',
+    rundenText: '{n} Runden',
+    starten: 'Spiel starten',
+    warteAufGastgeber: '{name} wählt das Spiel und startet.',
+    verlassen: 'Raum verlassen',
+    verlassenFrage: 'Raum wirklich schließen? Dann endet das Spiel für alle.',
+  },
+
+  erklaerung: {
+    verstanden: 'Verstanden',
+    warten: 'Gleich geht’s los, die anderen lesen noch.',
+  },
+
+  runde: {
+    nummer: 'Runde {nr} von {gesamt}',
+    fertig: '{fertig} von {gesamt} fertig',
+    gewaehlt: 'Gewählt. Warte auf die anderen …',
+    stimmen: ({ n }) => (n === 1 ? '1 Stimme' : `${n} Stimmen`),
+    werTrinkt: 'Wer trinkt',
+    duTrinkst: 'Du trinkst',
+    niemandTrinkt: 'Niemand trinkt. Prost trotzdem!',
+    naechsteRunde: 'Du bist ab der nächsten Runde dabei.',
+    nichtWarten: 'Nicht mehr warten',
+    weiter: 'Nächste Runde',
+    zumErgebnis: 'Zum Endergebnis',
+    warteAufGastgeber: '{name} startet gleich die nächste Runde.',
+    hilfe: 'Spielregeln anzeigen',
+    regel: 'Regel:',
+  },
+
+  ende: {
+    titel: 'Endergebnis',
+    gesamt: ({ n }) => `Zusammen ${n === 1 ? '1 Schluck' : `${n} Schlucke`}. Một hai ba dô!`,
+    platz: 'Platz',
+    schlucke: 'Schlucke',
+    nochmal: 'Nochmal spielen',
+    menue: 'Anderes Spiel',
+  },
+
+  spiele: {
+    mix: {
+      name: 'Party-Mix',
+      kurz: 'Alle Spiele gemischt, dazwischen Karten',
+    },
+    'wer-wuerde-eher': {
+      name: 'Wer würde eher',
+      kurz: 'Geheim abstimmen, wer am ehesten …',
+      schritte: [
+        'Eine Frage erscheint, z. B. „Wer würde eher nackt baden gehen?“',
+        'Du tippst geheim auf eine Person. Niemand sieht, wen du wählst.',
+        'Wer die meisten Stimmen hat, trinkt so viele Schlucke, wie er Stimmen hat.',
+      ],
+      auftrag: 'Tippe auf die Person, die am ehesten passt.',
+    },
+    mehrheit: {
+      name: 'Mehrheit gewinnt',
+      kurz: 'Entweder oder. Die Minderheit trinkt',
+      schritte: [
+        'Eine Entweder-oder-Frage erscheint, z. B. „Strand oder Berge?“',
+        'Du wählst geheim eine Seite.',
+        'Die kleinere Gruppe trinkt 2 Schlucke. Bei Gleichstand trinken alle 1.',
+      ],
+      ausgang: {
+        minderheit: 'Die Minderheit trinkt.',
+        gleichstand: 'Gleichstand! Alle trinken einen.',
+        einig: 'Alle einer Meinung. Niemand muss trinken.',
+      },
+    },
+    luegner: {
+      name: 'Der Lügner',
+      kurz: 'Einer hat heimlich eine andere Frage',
+      schritte: [
+        'Alle bekommen dieselbe Frage, nur eine Person heimlich eine leicht andere. Sie weiß es selbst nicht!',
+        'Jeder tippt eine kurze Antwort.',
+        'Dann seht ihr die echte Frage und alle Antworten. Diskutiert und stimmt ab: Wer hatte die andere Frage?',
+        'Lügner erwischt: Er trinkt 3. Nicht erwischt: Alle anderen trinken 2.',
+      ],
+      auftragAntworten: 'Antworte kurz, ein paar Worte oder eine Zahl.',
+      platzhalter: 'Deine Antwort',
+      geantwortet: 'Antwort abgeschickt. Warte auf die anderen …',
+      echteFrageWar: 'Die echte Frage war:',
+      auftragAbstimmen: 'Redet drüber! Dann tippe auf die Antwort, die nicht passt.',
+      luegnerWar: 'Die andere Frage hatte',
+      seineFrage: 'und zwar:',
+      erwischt: 'Erwischt! {name} trinkt.',
+      entkommen: '{name} ist davongekommen. Alle anderen trinken.',
+    },
+    schaetzfrage: {
+      name: 'Schätzfrage',
+      kurz: 'Zahl schätzen. Am weitesten weg trinkt',
+      schritte: [
+        'Eine Frage mit einer Zahl als Antwort erscheint.',
+        'Du tippst geheim deine Schätzung ein.',
+        'Wer am weitesten daneben liegt, trinkt 3. Wer am nächsten dran ist, darf 2 Schlucke verteilen.',
+      ],
+      platzhalter: 'Deine Schätzung',
+      richtig: 'Richtig ist',
+      verteilen: '{name} war am nächsten dran und darf 2 Schlucke verteilen.',
+    },
+    karte: {
+      name: 'Karten',
+      kurz: 'Ich hab noch nie, Pflicht und Regeln',
+      schritte: [
+        'Eine Karte erscheint bei allen gleichzeitig.',
+        'Ich hab noch nie …: Wer es schon gemacht hat, trinkt.',
+        'Pflicht: Die genannte Person macht die Aufgabe oder trinkt 3.',
+        'Regel: Gilt, bis die nächste Regel kommt. Wer sie bricht, trinkt.',
+      ],
+      arten: {
+        nie: 'Ich hab noch nie',
+        pflicht: 'Pflicht',
+        regel: 'Neue Regel',
+      },
+      unterzeile: {
+        nie: 'Wer es schon getan hat, trinkt.',
+        pflicht: 'Mach es, oder trink 3 Schlucke.',
+        regel: 'Gilt ab jetzt bis zur nächsten Regel. Wer sie bricht, trinkt.',
+      },
+    },
+  },
+};

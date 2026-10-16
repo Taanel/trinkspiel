@@ -1,0 +1,16 @@
+{
+  "name": "trinkspiel",
+  "version": "1.0.0",
+  "description": "Một hai ba dô: Trinkspiel für Freunde, jeder spielt mit dem eigenen Handy (DE/EN/VI).",
+  "homepage": "https://taanel.github.io/trinkspiel/",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "node werkzeuge/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

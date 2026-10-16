@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+# Arbeitsdateien der Design-Werkzeuge (nicht Teil der Website)
+.taste-skill/
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/build/
+.impeccable/questions/
