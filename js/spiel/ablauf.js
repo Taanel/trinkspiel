@@ -112,8 +112,10 @@ function starteRunde(zustand, typId) {
 }
 
 // Zufällige Frage, die in diesem Raum noch nicht dran war.
+// Runden-Typen ohne Fragen-Datei (z. B. Schnellster Finger) bekommen null.
 function waehleFrage(zustand, typId) {
   const alle = fragenFuer(typId);
+  if (alle.length === 0) return null;
   let benutzt = zustand.benutzt[typId] ?? [];
   let frei = alle.filter((f) => !benutzt.includes(f.id));
   if (frei.length === 0) {
@@ -194,6 +196,14 @@ export function erzwingen(zustand) {
   // Manche Typen (Lügner) gehen erst in die nächste Phase statt direkt zum Ergebnis.
   if (typ.erzwingen?.(runde)) pruefeFertig(zustand);
   else abschliessen(zustand);
+}
+
+// Runden mit Zeitlimit (z. B. Heiße Kartoffel): Ist die Zeit um, wird ausgewertet.
+// Der Gastgeber ruft das über einen Timer auf (siehe netz/gastgeber.js).
+export function zeitPruefen(zustand, jetzt) {
+  const runde = zustand.runde;
+  if (zustand.phase !== 'runde' || !runde || runde.ergebnis || !runde.endetUm) return;
+  if (jetzt >= runde.endetUm) abschliessen(zustand);
 }
 
 // Gastgeber: "Weiter" nach dem Ergebnis.

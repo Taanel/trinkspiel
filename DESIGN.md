@@ -12,6 +12,9 @@ colors:
   minze: "#9fe3c9"
   flieder: "#b9b4f5"
   aprikose: "#f7b267"
+  lachs: "#f7a08a"
+  limette: "#d4e36b"
+  himmel: "#9fd3f4"
   koralle: "#f59e9e"
   tinte: "#1b1f3a"
   tinte-2: "#3b3f63"
@@ -314,3 +317,13 @@ A fixed-cell rank table like a xổ số results board: rank, avatar, name, sips
 - **Don't** put small uppercase labels (eyebrows) above headings.
 - **Don't** use a font without Vietnamese support.
 - **Don't** use print blue on night or plain grey text; secondary text is lilac grey.
+
+## Added games (Heiße Kartoffel, Schnellster Finger, Herdentrieb)
+
+Each new game gets its own paper so every menu ticket stays distinct: salmon `#f7a08a` (Heiße Kartoffel), lime `#d4e36b` (Schnellster Finger), sky `#9fd3f4` (Herdentrieb). These are game papers only; avatars keep the six original papers.
+
+- **Bomb (Heiße Kartoffel):** a salmon disc with the line bomb icon. It pulses steadily while ticking (the fuse is secret, so the pulse never speeds up). The holder sees the large bomb and a 72px "pass on" button. On explosion the bomb pops in with a short rotation and "BUMM!" in condensed salmon display type.
+- **Reaction field (Schnellster Finger):** one large night-high field, at least 52vh, reacting on pointerdown. It switches to a lime paper with "JETZT!" in condensed display type. Early taps show "zu früh" in coral.
+- **Herd groups (Herdentrieb):** answer groups are night slabs with the answer, the count and avatars. The herd group becomes a sky paper with guilloche and owns the field; the question ticket steps back like on other reveal screens.
+- Every new animation (ticking, explosion) has the global reduced-motion fallback.
+

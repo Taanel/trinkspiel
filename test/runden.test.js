@@ -270,3 +270,92 @@ test('Getränke: Punkte werden je nach Getränk in Schlucke umgerechnet', () => 
   assert.equal(umrechnen(0, 'shot'), 0);
   assert.equal(umrechnen(3, undefined), 3); // ohne Wahl wie Bier
 });
+
+// ---------- Heiße Kartoffel ----------
+
+test('Kartoffel: nur der Halter gibt weiter, mit Sperre, an den nächsten verbundenen Spieler', () => {
+  const typ = rundenTyp('kartoffel');
+  const alle = spieler('a', 'b', 'c');
+  const r = typ.erstelle(alle, fragen.kartoffel[0]);
+  r.reihenfolge = ['a', 'b', 'c'];
+  r.halter = 'a';
+  r.seit = Date.now() - 5000;
+  typ.eingabe(r, 'b', 'weiter', alle); // b hat die Bombe nicht
+  assert.equal(r.halter, 'a');
+  typ.eingabe(r, 'a', 'weiter', alle);
+  assert.equal(r.halter, 'b');
+  typ.eingabe(r, 'b', 'weiter', alle); // sofort zurück: gesperrt
+  assert.equal(r.halter, 'b');
+  r.seit = Date.now() - 5000;
+  alle.find((s) => s.id === 'c').verbunden = false; // c ist weg → überspringen
+  typ.eingabe(r, 'b', 'weiter', alle);
+  assert.equal(r.halter, 'a');
+});
+
+test('Kartoffel: Zündschnur ist geheim, Explosion über zeitPruefen', () => {
+  const z = raum('ben', 'cem');
+  A.waehleSpiel(z, 'kartoffel');
+  A.spielStarten(z);
+  A.erklaerungBeenden(z);
+  const sicht = A.baueSicht(z, 'ben');
+  assert.ok(!JSON.stringify(sicht).includes(String(z.runde.endetUm)), 'endetUm darf nicht in der Sicht stehen');
+  assert.ok(!('endetUm' in sicht.runde));
+  A.zeitPruefen(z, z.runde.endetUm - 1);
+  assert.equal(z.runde.ergebnis, undefined, 'vor der Zeit: noch nicht explodiert');
+  const halter = z.runde.halter;
+  A.zeitPruefen(z, z.runde.endetUm);
+  assert.deepEqual(z.runde.ergebnis.punkte, { [halter]: 3 });
+});
+
+// ---------- Schnellster Finger ----------
+
+test('Reaktion: zu früh und langsamste trinken, schnellste wird genannt', () => {
+  const typ = rundenTyp('reaktion');
+  const r = typ.erstelle();
+  typ.eingabe(r, 'a', 250);
+  typ.eingabe(r, 'b', 400);
+  typ.eingabe(r, 'c', 'frueh');
+  typ.eingabe(r, 'd', 'quatsch'); // ungültig → ignoriert
+  typ.eingabe(r, 'd', 320);
+  typ.eingabe(r, 'd', 100); // zweiter Versuch zählt nicht
+  const erg = typ.auswerten(r);
+  assert.deepEqual(erg.punkte, { c: 2, b: 2 });
+  assert.deepEqual(erg.schnellste, ['a']);
+  assert.equal(erg.liste.at(-1).id, 'c');
+});
+
+test('Reaktion: alle gleich schnell → nur wer zu früh war trinkt', () => {
+  const typ = rundenTyp('reaktion');
+  const r = typ.erstelle();
+  typ.eingabe(r, 'a', 300);
+  typ.eingabe(r, 'b', 300);
+  assert.deepEqual(typ.auswerten(r).punkte, {});
+});
+
+// ---------- Herdentrieb ----------
+
+test('Herde: Antworten werden vereinheitlicht, Herde bleibt trocken', async () => {
+  const { vereinheitliche } = await import('../js/runden/herde.js');
+  assert.equal(vereinheitliche(' B.M.W. '), 'bmw');
+  assert.equal(vereinheitliche('Hà Nội'), 'hanoi');
+  assert.equal(vereinheitliche('Đà Nẵng'), 'danang');
+  assert.equal(vereinheitliche('Müller'), 'muller');
+  const typ = rundenTyp('herde');
+  const r = typ.erstelle([], fragen.herde[0]);
+  typ.eingabe(r, 'a', 'BMW');
+  typ.eingabe(r, 'b', 'bmw');
+  typ.eingabe(r, 'c', 'Audi');
+  typ.eingabe(r, 'd', '   '); // leer → ignoriert
+  const erg = typ.auswerten(r);
+  assert.equal(erg.herdeAntwort, 'BMW');
+  assert.deepEqual(erg.punkte, { c: 2 });
+});
+
+test('Herde: keine eindeutige Herde → alle trinken 1', () => {
+  const typ = rundenTyp('herde');
+  const r = typ.erstelle([], fragen.herde[0]);
+  for (const [id, text] of [['a', 'BMW'], ['b', 'BMW'], ['c', 'Audi'], ['d', 'audi']]) typ.eingabe(r, id, text);
+  const erg = typ.auswerten(r);
+  assert.equal(erg.herdeAntwort, null);
+  assert.deepEqual(erg.punkte, { a: 1, b: 1, c: 1, d: 1 });
+});

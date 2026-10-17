@@ -36,6 +36,9 @@
   --minze: #9fe3c9;
   --flieder: #b9b4f5;
   --aprikose: #f7b267;
+  --lachs: #f7a08a; /* Heiße Kartoffel */
+  --limette: #d4e36b; /* Schnellster Finger */
+  --himmel: #9fd3f4; /* Herdentrieb */
   --koralle: #f59e9e; /* nur für Fehlermeldungen */
 
   /* Druckfarben auf dem Los */
@@ -484,6 +487,9 @@ main {
 .farbe-minze { --los: var(--minze); }
 .farbe-flieder { --los: var(--flieder); }
 .farbe-aprikose { --los: var(--aprikose); }
+.farbe-lachs { --los: var(--lachs); }
+.farbe-limette { --los: var(--limette); }
+.farbe-himmel { --los: var(--himmel); }
 .farbe-papier { --los: var(--papier); }
 
 /* In einer Runde übernimmt die Frage die Farbe des Spiels */
@@ -493,6 +499,8 @@ main {
 .runden-flaeche.farbe-flieder .enthuellung { --los: var(--flieder); }
 .runden-flaeche.farbe-aprikose .frage,
 .runden-flaeche.farbe-aprikose .loesung { --los: var(--aprikose); }
+.runden-flaeche.farbe-lachs .frage { --los: var(--lachs); }
+.runden-flaeche.farbe-himmel .frage { --los: var(--himmel); }
 
 /* Nur das aktive Los trägt die feinen Wellenlinien */
 .los.gewaehlt,
@@ -551,8 +559,7 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
-.lose .los.gross,
-.lose .los.farbe-papier {
+.lose .los.gross {
   grid-column: span 2;
   min-height: 0;
 }
@@ -1167,7 +1174,7 @@ main {
 
 /* Sobald die Auflösung (Lügner/Schätzfrage) ein eigenes Los zeigt, tritt die Frage zurück:
    nur noch ein Los besitzt den Bildschirm. */
-.runde:has(.enthuellung, .loesung) .frage {
+.runde:has(.enthuellung, .loesung, .herden-gruppe.herde) .frage {
   padding: 4px 0 0;
   background: none;
   color: var(--papier);
@@ -1176,7 +1183,7 @@ main {
   mask: none;
 }
 
-.runde:has(.enthuellung, .loesung) .frage::before {
+.runde:has(.enthuellung, .loesung, .herden-gruppe.herde) .frage::before {
   display: none;
 }
 
@@ -1610,6 +1617,148 @@ button.seite:active {
   color: var(--zitrone);
 }
 
+/* ---------- Heiße Kartoffel ---------- */
+.bombe-halter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 12px;
+  border-radius: var(--radius-flaeche);
+  background: var(--nacht-2);
+  text-align: center;
+}
+
+.bombe-halter.ich {
+  background: var(--nacht-3);
+}
+
+.bombe {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--lachs);
+  color: var(--tinte);
+}
+
+.bombe .ikon {
+  width: 72px;
+  height: 72px;
+  stroke-width: 1.6;
+}
+
+.bombe-halter:not(.ich) .bombe {
+  width: 84px;
+  height: 84px;
+}
+
+.bombe-halter:not(.ich) .bombe .ikon {
+  width: 48px;
+  height: 48px;
+}
+
+/* Die Bombe tickt: pulsiert gleichmäßig (Zündschnur bleibt geheim) */
+.bombe.tickt {
+  animation: ticken 0.9s ease-in-out infinite;
+}
+
+.bombe-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.knopf.weitergeben {
+  min-height: 72px;
+  font-size: 1.5rem;
+}
+
+.bumm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0 4px;
+}
+
+.bombe.explodiert {
+  width: 140px;
+  height: 140px;
+  animation: explodieren 0.5s var(--ease-raus) both;
+}
+
+.bumm-text {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 4rem;
+  line-height: 0.9;
+  color: var(--lachs);
+}
+
+/* ---------- Schnellster Finger ---------- */
+.reaktions-feld {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 52vh;
+  border: 0;
+  border-radius: var(--radius-los);
+  background: var(--nacht-3);
+  color: var(--papier-2);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.reaktions-feld.jetzt {
+  background: var(--limette);
+  color: var(--tinte);
+}
+
+.reaktions-text {
+  font-family: var(--schrift-anzeige);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 3.2rem;
+  line-height: 1;
+}
+
+.schaetz-zeile.zu-frueh .schaetz-wert {
+  color: var(--koralle);
+}
+
+/* ---------- Herdentrieb ---------- */
+.herden-gruppe {
+  grid-template-areas: 'text stimmen' 'avatare avatare';
+  grid-template-columns: 1fr auto;
+  row-gap: 8px;
+  padding: 12px 16px;
+}
+
+.herden-gruppe .antwort-text { grid-area: text; }
+.herden-gruppe .antwort-stimmen { grid-area: stimmen; font-size: 1.4rem; }
+
+.gruppen-avatare {
+  grid-area: avatare;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Die Herde: Lospapier in Himmelblau */
+.herden-gruppe.herde {
+  background: var(--himmel) var(--guilloche);
+  color: var(--tinte);
+}
+
 /* ---------- 8. Animationen ---------- */
 
 /* Die Frage wird wie ein Los vom Stapel gezogen */
@@ -1659,6 +1808,17 @@ button.seite:active {
 
 @keyframes einrasten {
   from { transform: scale(1.25); }
+}
+
+@keyframes ticken {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+
+@keyframes explodieren {
+  0% { transform: scale(0.6) rotate(-8deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(6deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
 }
 
 @keyframes schwingen {

@@ -19,6 +19,9 @@ Ein Trinkspiel für Freunde. Jeder spielt mit dem **eigenen Handy**, in seiner S
 | Mehrheit gewinnt | Entweder-oder. Die Minderheit trinkt |
 | Der Lügner | Eine Person hat heimlich eine andere Frage. Findet sie! |
 | Schätzfrage | Zahl schätzen. Wer am weitesten weg liegt, trinkt |
+| Heiße Kartoffel | Thema nennen, Bombe weitergeben. Bei wem sie explodiert, trinkt |
+| Schnellster Finger | Tippen, sobald das Feld gelb wird. Zu früh oder zu langsam: trinken |
+| Herdentrieb | Ein Wort tippen, das die meisten tippen. Wer nicht in der Herde ist, trinkt |
 | Karten | Ich hab noch nie, Pflicht-Aufgaben und Regeln |
 
 **Getränke und Schlucke**
@@ -36,6 +39,7 @@ Wer trinken muss, trinkt immer mindestens 1 Schluck. Die Rangliste am Ende zähl
 **Gut zu wissen**
 - Das Gastgeber-Handy ist der „Server“. Wenn der Gastgeber die Seite schließt, pausiert das Spiel. Lädt er neu, tippt er auf „Spiel fortsetzen“, und die anderen verbinden sich automatisch wieder.
 - Wer die Seite neu lädt, kommt mit demselben Namen und denselben Schlucken zurück.
+- Die Handys schicken sich alle 5 Sekunden ein Lebenszeichen. Wer ca. 20 Sekunden nichts von sich hören lässt (Funkloch, Akku leer), wird als „weg“ angezeigt und nicht mehr abgewartet. Kommt er zurück, ist er sofort wieder dabei.
 - Trinkt verantwortungsvoll. Ein Schluck darf auch Wasser sein.
 
 ## Auf dem eigenen Rechner starten
@@ -84,11 +88,13 @@ Achte auf die Kommas zwischen den Zeilen (nach der letzten Zeile kein Komma). Da
 | `luegner.json` | `{"id", "de": {"echt", "luege"}, …}`: zwei ähnliche Fragen, deren Antworten ähnlich aussehen (z. B. beide eine Zahl) |
 | `schaetzfragen.json` | `{"id", "antwort": 330, "de": {"frage", "einheit"}, …}`, bei Jahreszahlen zusätzlich `"format": "jahr"` |
 | `karten.json` | `{"id", "art": "nie" / "pflicht" / "regel", "de", "en", "vi"}` |
+| `kartoffel.json` | `{"id", "de", "en", "vi"}`: ein Thema, z. B. „Biermarken“ |
+| `herde.json` | `{"id", "de", "en", "vi"}`: eine Frage, deren Antwort in jeder Sprache gleich ist (Marken, Städte, Zahlen) |
 
 ## Neues Spiel (Runden-Typ) bauen
 
 1. Eine Datei in `js/runden/` kopieren, z. B. `mehrheit.js` → `meinspiel.js`. Jede Datei hat drei Teile: **Spielregeln**, **Sicht** (was ein Spieler sehen darf) und **Bildschirm**. Die Kommentare in `wer-wuerde-eher.js` erklären jeden Teil.
-2. `id`, `farbe`, `minSpieler` und `fragenDatei` anpassen, Fragen-Datei in `fragen/` anlegen.
+2. `id`, `farbe`, `minSpieler` und `fragenDatei` anpassen, Fragen-Datei in `fragen/` anlegen (oder `fragenDatei: null`, wenn das Spiel keine Fragen braucht, wie `reaktion.js`). Soll eine Runde nach einer Zeit enden, setze `endetUm` (siehe `kartoffel.js`).
 3. In `js/runden/index.js` importieren und in `RUNDEN_TYPEN` eintragen. Damit erscheint das Spiel automatisch im Menü und im Party-Mix.
 4. In `js/sprache/de.js`, `en.js` und `vi.js` unter `spiele` einen Eintrag mit `name`, `kurz` und `schritte` (Erklärung) ergänzen.
 5. `npm test` laufen lassen und einen Test in `test/runden.test.js` dazuschreiben.

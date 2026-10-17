@@ -34,6 +34,8 @@ const IKONEN = {
   bier: 'M6 7h9v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zM15 10h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2M6 7c0-2 2-3 3.5-2C10 3 13 3 14 4.5 15 4 16 5.5 15 7M9.5 11v6M12.5 11v6',
   mix: 'M4 4h16l-8 9zM12 13v7M8 20h8M14 2l3-1M16.5 1.5 14 7',
   shot: 'M7 5h10l-1.6 15H8.6zM7.6 10h8.8',
+  // Heiße Kartoffel
+  bombe: 'M11 21a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM14.5 8.5l2-2M16.5 6.5c.5-1.5 2-2.5 3.5-2M20 2.5v1M21.5 4h-1M7.5 13a3.5 3.5 0 0 1 3.5-3.5',
 };
 export function ikon(name) {
   const ns = 'http://www.w3.org/2000/svg';
